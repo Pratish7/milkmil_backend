@@ -12,3 +12,10 @@ class Guests(models.Model):
     # image_url = models.CharField(max_length=2000, null=True, blank=True)
 
 
+class Milk(models.Model):
+
+    id = models.AutoField(primary_key=True)
+    type = models.CharField(max_length=255)
+    quantity = models.FloatField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    
