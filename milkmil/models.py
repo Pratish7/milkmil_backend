@@ -71,6 +71,20 @@ class ReturnableMaterials(models.Model):
     status = models.CharField(choices=status_choices)
 
 
+class MaterialOutward(models.Model):
+
+    status_choices = (
+        ('QUEUE', 'QUEUE'),
+        ('DISPATCHED / COMPLETED', 'DISPATCHED / COMPLETED'),
+    )
+
+    id = models.AutoField(primary_key=True)
+    date = models.DateField(auto_now_add=True)
+    time = models.TimeField(auto_now_add=True)
+    invoice_num = models.CharField()
+    status = models.CharField(choices=status_choices)
+
+
 class MasterData(models.Model):
 
     key = models.CharField(max_length=255, primary_key=True)

@@ -2,12 +2,12 @@ from typing import Any
 from rest_framework import viewsets, mixins
 from rest_framework.request import Request
 from rest_framework.response import Response
-from milkmil.models import Guests, Milk, Vehicle, Keys, ReturnableMaterials, MasterData
+from milkmil.models import Guests, Milk, Vehicle, Keys, ReturnableMaterials, MasterData, MaterialOutward
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from milkmil.serializers import GuestsSerializer, MilkSerializer, VehicleSerializer, KeysSerializer, ReturnableMaterialsSerializer, MasterDataSerializer
+from milkmil.serializers import GuestsSerializer, MilkSerializer, VehicleSerializer, KeysSerializer, ReturnableMaterialsSerializer, MasterDataSerializer, MaterialOutwardSerializer
 from rest_framework.filters import SearchFilter
-from milkmil.filters import GuestsFilter, MilkFilter, VehicleFilter, KeyFilter, ReturnableMaterialsFilter, MasterDataFilter
+from milkmil.filters import GuestsFilter, MilkFilter, VehicleFilter, KeyFilter, ReturnableMaterialsFilter, MasterDataFilter, MaterialOutwardFilter
 
 
 class GuestsView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
@@ -61,4 +61,13 @@ class MasterDataView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.Cre
     queryset = MasterData.objects.all()
     serializer_class = MasterDataSerializer
     filter_backends = [MasterDataFilter, SearchFilter]
+    search_fields = []
+
+
+class MaterialOutwardView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
+    authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
+    permission_classes = ()
+    queryset = MaterialOutward.objects.all()
+    serializer_class = MaterialOutwardSerializer
+    filter_backends = [SearchFilter]
     search_fields = []

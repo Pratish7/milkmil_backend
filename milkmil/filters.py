@@ -43,3 +43,10 @@ class MasterDataFilter(filters.BaseFilterBackend):
         if request_key:
             queryset = queryset.filter(key=request_key)
         return queryset
+
+
+class MaterialOutwardFilter(filters.BaseFilterBackend):
+
+    def filter_queryset(self, request, queryset, view):
+
+        return queryset
