@@ -20,3 +20,10 @@ class VehicleFilter(filters.BaseFilterBackend):
     def filter_queryset(self, request, queryset, view):
 
         return queryset
+    
+
+class KeyFilter(filters.BaseFilterBackend):
+
+    def filter_queryset(self, request, queryset, view):
+
+        return queryset

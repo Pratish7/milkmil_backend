@@ -12,10 +12,14 @@ milk_router.register('milk', views.MilkView, basename='milk')
 vehicle_router = routers.SimpleRouter()
 vehicle_router.register('vehicle', views.VehicleView, basename='vehicle')
 
+keys_router = routers.SimpleRouter()
+keys_router.register('keys', views.KeyView, basename='keys')
+
 app_name = 'milkmil'
 
 urlpatterns = [
     path('', include(guests_router.urls)),
     path('', include(milk_router.urls)),
     path('', include(vehicle_router.urls)),
+    path('', include(keys_router.urls)),
 ]

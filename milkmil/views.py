@@ -1,10 +1,10 @@
 from rest_framework import viewsets, mixins
-from milkmil.models import Guests, Milk, Vehicle
+from milkmil.models import Guests, Milk, Vehicle, Keys
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from milkmil.serializers import GuestsSerializer, MilkSerializer, VehicleSerializer
+from milkmil.serializers import GuestsSerializer, MilkSerializer, VehicleSerializer, KeysSerializer
 from rest_framework.filters import SearchFilter
-from milkmil.filters import GuestsFilter, MilkFilter, VehicleFilter
+from milkmil.filters import GuestsFilter, MilkFilter, VehicleFilter, KeyFilter
 
 
 class GuestsView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
@@ -29,6 +29,15 @@ class VehicleView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.Create
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
     permission_classes = ()
     queryset = Vehicle.objects.all()
-    serializer_class = MilkSerializer
+    serializer_class = VehicleSerializer
     filter_backends = [VehicleFilter, SearchFilter]
+    search_fields = []
+
+
+class KeyView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
+    authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
+    permission_classes = ()
+    queryset = Keys.objects.all()
+    serializer_class = KeysSerializer
+    filter_backends = [KeyFilter, SearchFilter]
     search_fields = []

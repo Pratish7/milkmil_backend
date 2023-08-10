@@ -30,3 +30,25 @@ class Vehicle(models.Model):
     in_time = models.DateTimeField(auto_now_add=True)
     out_time = models.DateTimeField(null=True, blank=True)
     out_kms = models.FloatField(null=True, blank=True)
+
+
+class Keys(models.Model):
+
+    key_types = (
+        ('SPINNING' , 'SPINNING'),
+        ('CARDING', 'CARDING'),
+        ('AUTOCONER', 'AUTOCONER'),
+        ('NEW GODOWN', 'NEW GODOWN'),
+        ('CANTEEN', 'CANTEEN'),
+        ('COMBER', 'COMBER'),
+        ('FM ROOM', 'FM ROOM'),
+        ('OFFICE', 'OFFICE'),
+        ('SIMPLEX', 'SIMPLEX'),
+        ('STORE ROOM', 'STORE ROOM'),
+    )
+
+    date = models.DateField(auto_now_add=True)
+    key_type = models.CharField(choices=key_types)
+    taken_time = models.DateTimeField(auto_now_add=True)
+    returned_time = models.DateTimeField(null=True, blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
