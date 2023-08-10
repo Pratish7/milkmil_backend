@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from milkmil.models import Guests, Milk, Vehicle, Keys, ReturnableMaterials
+from milkmil.models import Guests, Milk, Vehicle, Keys, ReturnableMaterials, MasterData
 
 
 class GuestsSerializer(serializers.ModelSerializer):
@@ -34,4 +34,11 @@ class ReturnableMaterialsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ReturnableMaterials
+        fields = '__all__'
+
+
+class MasterDataSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = MasterData
         fields = '__all__'

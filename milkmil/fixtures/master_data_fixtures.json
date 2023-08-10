@@ -1,0 +1,10 @@
+[
+    {
+      "model": "milkmil.MasterData",
+      "pk": 1,
+      "fields": {
+        "key": "Keys",
+        "values": ["SPINNING", "CARDING", "AUTOCONER", "NEW GODOWN", "CANTEEN", "COMBER", "FM ROOM", "OFFICE", "SIMPLEX", "STORE ROOM"]
+      }
+    }
+  ]

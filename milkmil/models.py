@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 
 
 class Guests(models.Model):
@@ -68,3 +69,9 @@ class ReturnableMaterials(models.Model):
     in_date = models.DateField(blank=True, null=True)
     in_time = models.TimeField(blank=True, null=True)
     status = models.CharField(choices=status_choices)
+
+
+class MasterData(models.Model):
+
+    key = models.CharField(max_length=255, primary_key=True)
+    values = ArrayField(models.CharField())
