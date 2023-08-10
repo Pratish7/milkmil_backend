@@ -30,5 +30,3 @@ class Vehicle(models.Model):
     in_time = models.DateTimeField(auto_now_add=True)
     out_time = models.DateTimeField(null=True, blank=True)
     out_kms = models.FloatField(null=True, blank=True)
-
-    

@@ -19,4 +19,3 @@ urlpatterns = [
     path('', include(milk_router.urls)),
     path('', include(vehicle_router.urls)),
 ]
-
