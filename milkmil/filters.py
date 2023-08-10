@@ -14,3 +14,11 @@ class MilkFilter(filters.BaseFilterBackend):
             
         return queryset
     
+
+
+class VehicleFilter(filters.BaseFilterBackend):
+
+    def filter_queryset(self, request, queryset, view):
+            
+        return queryset
+    
