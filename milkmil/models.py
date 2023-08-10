@@ -85,6 +85,15 @@ class MaterialOutward(models.Model):
     status = models.CharField(choices=status_choices)
 
 
+class MaterialInward(models.Model):
+
+    date = models.DateField(auto_now_add=True)
+    # vehicle_picture
+    invoice_num = models.CharField()
+    in_time = models.TimeField(auto_now_add=True)
+    out_time = models.TimeField(blank=True, null=True)
+
+
 class MasterData(models.Model):
 
     key = models.CharField(max_length=255, primary_key=True)

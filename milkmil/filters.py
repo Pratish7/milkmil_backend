@@ -50,3 +50,10 @@ class MaterialOutwardFilter(filters.BaseFilterBackend):
     def filter_queryset(self, request, queryset, view):
 
         return queryset
+
+
+class MaterialInwardFilter(filters.BaseFilterBackend):
+
+    def filter_queryset(self, request, queryset, view):
+
+        return queryset
