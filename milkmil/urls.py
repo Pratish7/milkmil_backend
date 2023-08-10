@@ -15,6 +15,9 @@ vehicle_router.register('vehicle', views.VehicleView, basename='vehicle')
 keys_router = routers.SimpleRouter()
 keys_router.register('keys', views.KeyView, basename='keys')
 
+returnable_materials_router = routers.SimpleRouter()
+returnable_materials_router.register('returnablematerials', views.ReturnableMaterialsView, basename='returnablematerials')
+
 app_name = 'milkmil'
 
 urlpatterns = [
@@ -22,4 +25,5 @@ urlpatterns = [
     path('', include(milk_router.urls)),
     path('', include(vehicle_router.urls)),
     path('', include(keys_router.urls)),
+    path('', include(returnable_materials_router.urls)),
 ]

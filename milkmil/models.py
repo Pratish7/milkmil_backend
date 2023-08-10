@@ -52,3 +52,19 @@ class Keys(models.Model):
     taken_time = models.DateTimeField(auto_now_add=True)
     returned_time = models.DateTimeField(null=True, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
+
+
+class ReturnableMaterials(models.Model):
+
+    status_choices = (
+        ('YET TO BE RETURNED', 'YET TO BE RETURNED'),
+        ('RETURNED / COMPLETED', 'RETURNED / COMPLETED'),
+    )
+
+    id = models.AutoField(primary_key=True)
+    out_date = models.DateField(auto_now_add=True)
+    out_time = models.TimeField(auto_now_add=True)
+    gate_pass_num = models.IntegerField()
+    in_date = models.DateField(blank=True, null=True)
+    in_time = models.TimeField(blank=True, null=True)
+    status = models.CharField(choices=status_choices)
