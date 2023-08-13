@@ -19,9 +19,9 @@ class Guests(models.Model):
 class Milk(models.Model):
 
     id = models.AutoField(primary_key=True)
-    type = models.CharField(max_length=255)
     quantity = models.FloatField()
-    timestamp = models.DateTimeField(auto_now_add=True)
+    date = models.DateField(auto_now_add=True)
+    time = models.TimeField(auto_now_add=True)
 
 
 class Vehicle(models.Model):

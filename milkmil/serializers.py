@@ -15,6 +15,7 @@ class MilkSerializer(serializers.ModelSerializer):
     class Meta:
         model = Milk
         fields = '__all__'
+        read_only_fields = ['id', 'date', 'time']
 
 
 class VehicleSerializer(serializers.ModelSerializer):
