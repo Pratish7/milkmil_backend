@@ -7,6 +7,7 @@ class GuestsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Guests
         fields = '__all__'
+        read_only_fields = ['id', 'in_date', 'in_time', 'out_date', 'out_time']
 
 
 class MilkSerializer(serializers.ModelSerializer):
