@@ -7,7 +7,7 @@ class Guests(models.Model):
     id = models.AutoField(primary_key=True)
     visitor_name = models.CharField(max_length=255)
     employee_name = models.CharField(max_length=255)
-    relationship = models.CharField(max_length=255)
+    relationship = models.CharField(max_length=255, null=True, blank=True)
     organization = models.CharField(max_length=255)
     in_date = models.DateField(auto_now_add=True)
     in_time = models.TimeField(auto_now_add=True)
