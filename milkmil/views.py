@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from milkmil.models import Guests, Milk, Vehicle, Keys, ReturnableMaterials, MasterData, MaterialOutward, MaterialInward
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from milkmil.serializers import GuestsSerializer, MilkSerializer, VehicleSerializer, KeysSerializer, ReturnableMaterialsSerializer, MasterDataSerializer, MaterialOutwardSerializer, MaterialInwardSerializer, UserTypesSerializer, RegisterUserSerializer
+from milkmil.serializers import GuestsSerializer, MilkSerializer, VehicleSerializer, KeysSerializer, ReturnableMaterialsSerializer, MasterDataSerializer, MaterialOutwardSerializer, MaterialInwardSerializer, UserTypesSerializer, RegisterUserSerializer, LoginUserSerializer
 from rest_framework.filters import SearchFilter
 from milkmil.filters import GuestsFilter, MilkFilter, VehicleFilter, KeyFilter, ReturnableMaterialsFilter, MasterDataFilter, MaterialOutwardFilter, MaterialInwardFilter, GuestsInFilter, MaterialInwardQueueFilter, MaterialOutwardQueueFilter, ReturnableMaterialsQueueFilter
 from rest_framework import status
@@ -13,6 +13,8 @@ from django.utils import timezone
 import pandas as pd
 from milkmil.utils import upload_file_to_gcp, generate_download_link
 import io
+from django.contrib.auth import authenticate
+from rest_framework.authtoken.models import Token
 
 
 class GuestsView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
@@ -381,3 +383,23 @@ class RegisterUserView(viewsets.GenericViewSet, mixins.CreateModelMixin):
     permission_classes = ()
     queryset = get_user_model().objects.all()
     serializer_class = RegisterUserSerializer
+
+
+class LoginUserView(viewsets.GenericViewSet, mixins.CreateModelMixin):
+    authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
+    permission_classes = ()
+    queryset = get_user_model().objects.all()
+    serializer_class = LoginUserSerializer
+
+    def create(self, request, *args, **kwargs):
+
+        req_data = request.data
+        if 'email' not in req_data or 'password' not in req_data:
+            return Response({'message': 'email and password are required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        user = authenticate(username=req_data['email'], password=req_data['password'])
+        if not user:
+            return Response({'message': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        token = Token.objects.create(user=user)
+        return Response({'token': token.key})

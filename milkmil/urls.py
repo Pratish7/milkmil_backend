@@ -78,6 +78,9 @@ user_types_router.register('usertypes', views.UserTypesView, basename='usertypes
 register_user_router = routers.SimpleRouter()
 register_user_router.register('register', views.RegisterUserView, basename='register')
 
+login_user_router = routers.SimpleRouter()
+login_user_router.register('login', views.LoginUserView, basename='login')
+
 app_name = 'milkmil'
 
 urlpatterns = [
@@ -106,4 +109,5 @@ urlpatterns = [
     path('', include(returnable_materials_update_router.urls)),
     path('', include(user_types_router.urls)),
     path('', include(register_user_router.urls)),
+    path('', include(login_user_router.urls)),
 ]

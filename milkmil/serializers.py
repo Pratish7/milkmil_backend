@@ -2,6 +2,8 @@ from rest_framework import serializers
 from milk_mil_backend.users.models import UserTypes
 from milkmil.models import Guests, Milk, Vehicle, Keys, ReturnableMaterials, MasterData, MaterialOutward, MaterialInward
 from django.contrib.auth import get_user_model
+from django.contrib.auth.hashers import make_password
+
 
 class GuestsSerializer(serializers.ModelSerializer):
 
@@ -78,5 +80,20 @@ class RegisterUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        fields = ['id', 'name', 'user_type', 'email']
+        fields = '__all__'
 
+    def create(self, validated_data):
+        if 'user_type' in validated_data:
+            user_types = validated_data.pop('user_type')
+            print(validated_data)
+        validated_data['password'] = make_password(validated_data['password'])
+        user = get_user_model().objects.create(**validated_data)
+        for user_type in user_types:
+            user.user_type.add(user_type)
+        return user
+
+
+class LoginUserSerializer(serializers.ModelSerializer):
+
+    email = serializers.CharField(required=True)
+    password = serializers.CharField(required=True)
