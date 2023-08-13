@@ -39,6 +39,9 @@ master_data_router.register('masterdata', views.MasterDataView, basename='master
 material_inward_router = routers.SimpleRouter()
 material_inward_router.register('materialinward', views.MaterialInwardView, basename='materialinward')
 
+material_inward_report_router = routers.SimpleRouter()
+material_inward_report_router.register('materialinward-report', views.MaterialInwardReportView, basename='materialinward-report')
+
 material_outward_router = routers.SimpleRouter()
 material_outward_router.register('materialoutward', views.MaterialOutwardView, basename='materialoutward')
 
@@ -62,4 +65,5 @@ urlpatterns = [
     path('', include(vehicle_report_router.urls)),
     path('', include(material_inward_router.urls)),
     path('', include(material_outward_report_router.urls)),
+    path('', include(material_inward_report_router.urls)),
 ]
