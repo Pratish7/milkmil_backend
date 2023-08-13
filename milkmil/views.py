@@ -8,6 +8,9 @@ from milkmil.filters import GuestsFilter, MilkFilter, VehicleFilter, KeyFilter, 
 from rest_framework import status
 from rest_framework.response import Response
 from django.utils import timezone
+import pandas as pd
+from milkmil.utils import upload_file_to_gcp, generate_download_link
+import io
 
 
 class GuestsView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
@@ -108,3 +111,26 @@ class GuestsOutUpdateView(viewsets.GenericViewSet,  mixins.UpdateModelMixin):
         instance.save()
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
+    
+
+class MilkReportView(viewsets.GenericViewSet,  mixins.ListModelMixin):
+    authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
+    permission_classes = ()
+    queryset = Milk.objects.all()
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        if 'from_date' not in request.query_params or 'to_date' not in request.query_params:
+            return Response({'missing params': 'from_date and to_date are required'}, status=status.HTTP_400_BAD_REQUEST)
+        from_date = request.query_params.get('from_date')
+        to_date = request.query_params.get('to_date')
+        queryset = queryset.filter(date__gte=from_date, date__lte=to_date)
+        df = pd.DataFrame.from_records(queryset.values())
+        df = df.drop(columns=['id'])
+        excel_buffer = io.BytesIO()
+        df.to_excel(excel_buffer, index=False)
+        excel_buffer.seek(0)
+        file_name = f'milk_report_{from_date}_{to_date}.xlsx'
+        upload_file_to_gcp(excel_buffer, file_name)
+        url = generate_download_link(file_name)
+        return Response({'url': url})

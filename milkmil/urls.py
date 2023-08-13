@@ -15,6 +15,9 @@ update_guest_out.register('guest-out', views.GuestsOutUpdateView, basename='gues
 milk_router = routers.SimpleRouter()
 milk_router.register('milk', views.MilkView, basename='milk')
 
+milk_report_router = routers.SimpleRouter()
+milk_report_router.register('milk-report', views.MilkReportView, basename='milk-report')
+
 vehicle_router = routers.SimpleRouter()
 vehicle_router.register('vehicle', views.VehicleView, basename='vehicle')
 
@@ -42,4 +45,5 @@ urlpatterns = [
     path('', include(material_outward_router.urls)),
     path('', include(guests_in_router.urls)),
     path('', include(update_guest_out.urls)),
+    path('', include(milk_report_router.urls)),
 ]
