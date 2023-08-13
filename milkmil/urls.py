@@ -57,6 +57,12 @@ material_inward_report_router.register('materialinward-report', views.MaterialIn
 material_outward_router = routers.SimpleRouter()
 material_outward_router.register('materialoutward', views.MaterialOutwardView, basename='materialoutward')
 
+material_outward_queue_router = routers.SimpleRouter()
+material_outward_queue_router.register('materialoutward-queue', views.MaterialOutwardQueueView, basename='materialoutward-queue')
+
+update_material_outward_router = routers.SimpleRouter()
+update_material_outward_router.register('materialoutward-out', views.MaterialOutwardUpdateView, basename='materialoutward-update')
+
 material_outward_report_router = routers.SimpleRouter()
 material_outward_report_router.register('materialoutward-report', views.MaterialOutwardReportView, basename='materialoutward-report')
 
@@ -82,4 +88,6 @@ urlpatterns = [
     path('', include(keys_report_router.urls)),
     path('', include(material_inward_queue_router.urls)),
     path('', include(update_material_inward_router.urls)),
+    path('', include(material_outward_queue_router.urls)),
+    path('', include(update_material_outward_router.urls)),
 ]

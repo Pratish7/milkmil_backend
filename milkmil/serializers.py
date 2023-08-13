@@ -54,7 +54,7 @@ class MaterialOutwardSerializer(serializers.ModelSerializer):
     class Meta:
         model = MaterialOutward
         fields = '__all__'
-        read_only_fields = ['id', 'date', 'time']
+        read_only_fields = ['id', 'date', 'time', 'status']
 
 
 class MaterialInwardSerializer(serializers.ModelSerializer):

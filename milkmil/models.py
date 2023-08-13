@@ -87,7 +87,7 @@ class MaterialOutward(models.Model):
     date = models.DateField(auto_now_add=True)
     time = models.TimeField(auto_now_add=True)
     invoice_num = models.CharField()
-    status = models.CharField(choices=status_choices)
+    status = models.CharField(choices=status_choices, default='QUEUE')
 
 
 class MaterialInward(models.Model):

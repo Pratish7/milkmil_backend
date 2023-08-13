@@ -4,7 +4,7 @@ from rest_framework.authentication import TokenAuthentication, SessionAuthentica
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from milkmil.serializers import GuestsSerializer, MilkSerializer, VehicleSerializer, KeysSerializer, ReturnableMaterialsSerializer, MasterDataSerializer, MaterialOutwardSerializer, MaterialInwardSerializer
 from rest_framework.filters import SearchFilter
-from milkmil.filters import GuestsFilter, MilkFilter, VehicleFilter, KeyFilter, ReturnableMaterialsFilter, MasterDataFilter, MaterialOutwardFilter, MaterialInwardFilter, GuestsInFilter, MaterialInwardQueueFilter
+from milkmil.filters import GuestsFilter, MilkFilter, VehicleFilter, KeyFilter, ReturnableMaterialsFilter, MasterDataFilter, MaterialOutwardFilter, MaterialInwardFilter, GuestsInFilter, MaterialInwardQueueFilter, MaterialOutwardQueueFilter
 from rest_framework import status
 from rest_framework.response import Response
 from django.utils import timezone
@@ -312,3 +312,28 @@ class MaterialInwardUpdateView(viewsets.GenericViewSet,  mixins.UpdateModelMixin
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
     
+
+class MaterialOutwardQueueView(viewsets.GenericViewSet,  mixins.ListModelMixin):
+    authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
+    permission_classes = ()
+    queryset = MaterialOutward.objects.all()
+    serializer_class = MaterialOutwardSerializer
+    filter_backends = [MaterialOutwardQueueFilter, SearchFilter]
+
+
+class MaterialOutwardUpdateView(viewsets.GenericViewSet,  mixins.UpdateModelMixin):
+    authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
+    permission_classes = ()
+    queryset = MaterialOutward.objects.all()
+    serializer_class = MaterialOutwardSerializer
+    
+    def update(self, request, *args, **kwargs):
+        
+        if 'status' not in request.data or request.data.get('status') != 'out':
+            return Response({'status': 'status is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        instance = self.get_object()
+        instance.status = 'DISPATCHED / COMPLETED'
+        instance.save()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)

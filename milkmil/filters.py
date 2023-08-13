@@ -73,3 +73,12 @@ class MaterialInwardQueueFilter(filters.BaseFilterBackend):
 
         queryset = queryset.filter(out_time__isnull=True)
         return queryset
+    
+
+class MaterialOutwardQueueFilter(filters.BaseFilterBackend):
+
+    def filter_queryset(self, request, queryset, view):
+
+        queryset = queryset.filter(status='QUEUE')
+        return queryset
+    
