@@ -26,11 +26,11 @@ class Milk(models.Model):
 
 class Vehicle(models.Model):
 
+    date = models.DateField(auto_now_add=True)
     type = models.CharField(max_length=255)
     driver_name = models.CharField(max_length=255)
     reason = models.CharField(max_length=255)
     num_passengers = models.IntegerField()
-    timestamp = models.DateTimeField(auto_now_add=True)
     in_time = models.DateTimeField(auto_now_add=True)
     out_time = models.DateTimeField(null=True, blank=True)
     out_kms = models.FloatField(null=True, blank=True)
