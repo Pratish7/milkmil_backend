@@ -36,8 +36,14 @@ returnable_materials_router.register('returnablematerials', views.ReturnableMate
 master_data_router = routers.SimpleRouter()
 master_data_router.register('masterdata', views.MasterDataView, basename='masterdata')
 
+material_inward_router = routers.SimpleRouter()
+material_inward_router.register('materialinward', views.MaterialInwardView, basename='materialinward')
+
 material_outward_router = routers.SimpleRouter()
 material_outward_router.register('materialoutward', views.MaterialOutwardView, basename='materialoutward')
+
+material_outward_report_router = routers.SimpleRouter()
+material_outward_report_router.register('materialoutward-report', views.MaterialOutwardReportView, basename='materialoutward-report')
 
 app_name = 'milkmil'
 
@@ -54,4 +60,6 @@ urlpatterns = [
     path('', include(milk_report_router.urls)),
     path('', include(guests_report_router.urls)),
     path('', include(vehicle_report_router.urls)),
+    path('', include(material_inward_router.urls)),
+    path('', include(material_outward_report_router.urls)),
 ]
