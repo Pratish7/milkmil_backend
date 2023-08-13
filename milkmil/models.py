@@ -19,7 +19,7 @@ class Guests(models.Model):
 class Milk(models.Model):
 
     id = models.AutoField(primary_key=True)
-    quantity = models.FloatField()
+    quantity = models.IntegerField()
     date = models.DateField(auto_now_add=True)
     time = models.TimeField(auto_now_add=True)
 
