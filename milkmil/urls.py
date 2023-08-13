@@ -33,6 +33,9 @@ keys_router.register('keys', views.KeyView, basename='keys')
 returnable_materials_router = routers.SimpleRouter()
 returnable_materials_router.register('returnablematerials', views.ReturnableMaterialsView, basename='returnablematerials')
 
+returnable_materials_report_router = routers.SimpleRouter()
+returnable_materials_report_router.register('returnablematerials-report', views.ReturnableMaterialsReportView, basename='returnablematerials-report')
+
 master_data_router = routers.SimpleRouter()
 master_data_router.register('masterdata', views.MasterDataView, basename='masterdata')
 
@@ -66,4 +69,5 @@ urlpatterns = [
     path('', include(material_inward_router.urls)),
     path('', include(material_outward_report_router.urls)),
     path('', include(material_inward_report_router.urls)),
+    path('', include(returnable_materials_report_router.urls)),
 ]
