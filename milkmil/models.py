@@ -73,7 +73,7 @@ class ReturnableMaterials(models.Model):
     gate_pass_num = models.IntegerField()
     in_date = models.DateField(blank=True, null=True)
     in_time = models.TimeField(blank=True, null=True)
-    status = models.CharField(choices=status_choices)
+    status = models.CharField(choices=status_choices, default='YET TO BE RETURNED')
 
 
 class MaterialOutward(models.Model):

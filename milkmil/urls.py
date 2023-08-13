@@ -36,6 +36,12 @@ keys_report_router.register('key-report', views.KeyReportView, basename='key-rep
 returnable_materials_router = routers.SimpleRouter()
 returnable_materials_router.register('returnablematerials', views.ReturnableMaterialsView, basename='returnablematerials')
 
+returnable_materials_queue_router = routers.SimpleRouter()
+returnable_materials_queue_router.register('returnablematerials-queue', views.ReturnableMaterialsQueueView, basename='returnablematerials-queue')
+
+returnable_materials_update_router = routers.SimpleRouter()
+returnable_materials_update_router.register('returnablematerials-out', views.ReturnableMaterialsUpdateView, basename='returnablematerials-update')
+
 returnable_materials_report_router = routers.SimpleRouter()
 returnable_materials_report_router.register('returnablematerials-report', views.ReturnableMaterialsReportView, basename='returnablematerials-report')
 
@@ -90,4 +96,6 @@ urlpatterns = [
     path('', include(update_material_inward_router.urls)),
     path('', include(material_outward_queue_router.urls)),
     path('', include(update_material_outward_router.urls)),
+    path('', include(returnable_materials_queue_router.urls)),
+    path('', include(returnable_materials_update_router.urls)),
 ]

@@ -39,7 +39,7 @@ class ReturnableMaterialsSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReturnableMaterials
         fields = '__all__'
-        read_only_fields = ['id', 'date', 'in_date', 'in_time', 'out_date', 'out_time']
+        read_only_fields = ['id', 'date', 'in_date', 'in_time', 'out_date', 'out_time', 'status']
 
 
 class MasterDataSerializer(serializers.ModelSerializer):

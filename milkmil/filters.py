@@ -81,4 +81,11 @@ class MaterialOutwardQueueFilter(filters.BaseFilterBackend):
 
         queryset = queryset.filter(status='QUEUE')
         return queryset
-    
+
+
+class ReturnableMaterialsQueueFilter(filters.BaseFilterBackend):
+
+    def filter_queryset(self, request, queryset, view):
+
+        queryset = queryset.filter(status='YET TO BE RETURNED')
+        return queryset
