@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from milk_mil_backend.users.models import UserTypes
 from milkmil.models import Guests, Milk, Vehicle, Keys, ReturnableMaterials, MasterData, MaterialOutward, MaterialInward
 
 
@@ -63,3 +64,11 @@ class MaterialInwardSerializer(serializers.ModelSerializer):
         model = MaterialInward
         fields = '__all__'
         read_only_fields = ['id', 'date', 'in_time']
+
+    
+class UserTypesSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserTypes
+        fields = '__all__'
+        read_only_fields = ['id']

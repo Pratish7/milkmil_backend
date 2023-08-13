@@ -1,0 +1,86 @@
+[
+    {
+      "model": "users.UserTypes",
+      "pk": 1,
+      "fields": {
+        "user_type": "Data Entry"
+      }
+    },
+    {
+      "model": "users.UserTypes",
+      "pk": 2,
+      "fields": {
+        "user_type": "QR Code Scan"
+      }
+    },
+    {
+      "model": "users.UserTypes",
+      "pk": 3,
+      "fields": {
+        "user_type": "Photo Clicking"
+      }
+    },
+    {
+      "model": "users.UserTypes",
+      "pk": 4,
+      "fields": {
+        "user_type": "Report Admin"
+      }
+    },
+    {
+      "model": "users.UserTypes",
+      "pk": 5,
+      "fields": {
+        "user_type": "Material Inward"
+      }
+    },
+    {
+      "model": "users.UserTypes",
+      "pk": 6,
+      "fields": {
+        "user_type": "Material Outward"
+      }
+    },
+    {
+      "model": "users.UserTypes",
+      "pk": 7,
+      "fields": {
+        "user_type": "Report View"
+      }
+    },
+    {
+      "model": "users.UserTypes",
+      "pk": 8,
+      "fields": {
+        "user_type": "Master Data Admin"
+      }
+    },
+    {
+      "model": "users.UserTypes",
+      "pk": 9,
+      "fields": {
+        "user_type": "Transaction Admin"
+      }
+    },
+    {
+      "model": "users.UserTypes",
+      "pk": 10,
+      "fields": {
+        "user_type": "Visitors Admin"
+      }
+    },
+    {
+      "model": "users.UserTypes",
+      "pk": 11,
+      "fields": {
+        "user_type": "Vehicle Admin"
+      }
+    },
+    {
+      "model": "users.UserTypes",
+      "pk": 12,
+      "fields": {
+        "user_type": "Status View"
+      }
+    }
+  ]

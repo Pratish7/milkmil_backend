@@ -1,8 +1,9 @@
 from rest_framework import viewsets, mixins
+from milk_mil_backend.users.models import UserTypes
 from milkmil.models import Guests, Milk, Vehicle, Keys, ReturnableMaterials, MasterData, MaterialOutward, MaterialInward
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from milkmil.serializers import GuestsSerializer, MilkSerializer, VehicleSerializer, KeysSerializer, ReturnableMaterialsSerializer, MasterDataSerializer, MaterialOutwardSerializer, MaterialInwardSerializer
+from milkmil.serializers import GuestsSerializer, MilkSerializer, VehicleSerializer, KeysSerializer, ReturnableMaterialsSerializer, MasterDataSerializer, MaterialOutwardSerializer, MaterialInwardSerializer, UserTypesSerializer
 from rest_framework.filters import SearchFilter
 from milkmil.filters import GuestsFilter, MilkFilter, VehicleFilter, KeyFilter, ReturnableMaterialsFilter, MasterDataFilter, MaterialOutwardFilter, MaterialInwardFilter, GuestsInFilter, MaterialInwardQueueFilter, MaterialOutwardQueueFilter, ReturnableMaterialsQueueFilter
 from rest_framework import status
@@ -365,3 +366,10 @@ class ReturnableMaterialsUpdateView(viewsets.GenericViewSet,  mixins.UpdateModel
         instance.save()
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
+    
+
+class UserTypesView(mixins.ListModelMixin, viewsets.GenericViewSet):
+    authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
+    permission_classes = ()
+    queryset = UserTypes.objects.all()
+    serializer_class = UserTypesSerializer
