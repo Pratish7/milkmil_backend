@@ -7,33 +7,6 @@ from django.db import models
 from milk_mil_backend.users.managers import UserManager
 
 
-class User(AbstractUser):
-    """
-    Default custom user model for milk_mil_backend.
-    If adding fields that need to be filled at user signup,
-    check forms.SignupForm and forms.SocialSignupForms accordingly.
-    """
-
-    # First and last name do not cover name patterns around the globe
-    name = CharField(_("Name of User"), blank=True, max_length=255)
-    first_name = None  # type: ignore
-    last_name = None  # type: ignore
-    email = EmailField(_("email address"), unique=True)
-    username = None  # type: ignore
-
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = []
-
-    objects = UserManager()
-
-    def get_absolute_url(self) -> str:
-        """Get URL for user's detail view.
-
-        Returns:
-            str: URL for user detail.
-
-        """
-        return reverse("users:detail", kwargs={"pk": self.id})
     
 class UserTypes(models.Model):
 
@@ -54,3 +27,36 @@ class UserTypes(models.Model):
 
     id = models.AutoField(primary_key=True)
     user_type = models.CharField(max_length=255, choices=user_types)
+
+
+class User(AbstractUser):
+    """
+    Default custom user model for milk_mil_backend.
+    If adding fields that need to be filled at user signup,
+    check forms.SignupForm and forms.SocialSignupForms accordingly.
+    """
+
+    # First and last name do not cover name patterns around the globe
+    name = CharField(_("Name of User"), blank=True, max_length=255)
+    first_name = None  # type: ignore
+    last_name = None  # type: ignore
+    email = EmailField(_("email address"), unique=True)
+    username = None  # type: ignore
+    # one to many relationship with UserTypes
+    user_type = models.ManyToManyField(UserTypes, null=True, blank=True)
+
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
+
+    objects = UserManager()
+
+    def get_absolute_url(self) -> str:
+        """Get URL for user's detail view.
+
+        Returns:
+            str: URL for user detail.
+
+        """
+        return reverse("users:detail", kwargs={"pk": self.id})
+
+

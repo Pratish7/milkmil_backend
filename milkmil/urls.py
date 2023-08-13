@@ -75,6 +75,9 @@ material_outward_report_router.register('materialoutward-report', views.Material
 user_types_router = routers.SimpleRouter()
 user_types_router.register('usertypes', views.UserTypesView, basename='usertypes')
 
+register_user_router = routers.SimpleRouter()
+register_user_router.register('register', views.RegisterUserView, basename='register')
+
 app_name = 'milkmil'
 
 urlpatterns = [
@@ -102,4 +105,5 @@ urlpatterns = [
     path('', include(returnable_materials_queue_router.urls)),
     path('', include(returnable_materials_update_router.urls)),
     path('', include(user_types_router.urls)),
+    path('', include(register_user_router.urls)),
 ]

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from milk_mil_backend.users.models import UserTypes
 from milkmil.models import Guests, Milk, Vehicle, Keys, ReturnableMaterials, MasterData, MaterialOutward, MaterialInward
-
+from django.contrib.auth import get_user_model
 
 class GuestsSerializer(serializers.ModelSerializer):
 
@@ -72,3 +72,11 @@ class UserTypesSerializer(serializers.ModelSerializer):
         model = UserTypes
         fields = '__all__'
         read_only_fields = ['id']
+
+
+class RegisterUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = get_user_model()
+        fields = ['id', 'name', 'user_type', 'email']
+
