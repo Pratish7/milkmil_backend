@@ -26,6 +26,7 @@ class Milk(models.Model):
 
 class Vehicle(models.Model):
 
+    id = models.AutoField(primary_key=True)
     date = models.DateField(auto_now_add=True)
     type = models.CharField(max_length=255)
     driver_name = models.CharField(max_length=255)
@@ -51,11 +52,12 @@ class Keys(models.Model):
         ('STORE ROOM', 'STORE ROOM'),
     )
 
+    id = models.AutoField(primary_key=True)
     date = models.DateField(auto_now_add=True)
+    person_name = models.CharField(max_length=255)
     key_type = models.CharField(choices=key_types)
-    taken_time = models.DateTimeField(auto_now_add=True)
-    returned_time = models.DateTimeField(null=True, blank=True)
-    timestamp = models.DateTimeField(auto_now_add=True)
+    taken_time = models.TimeField(auto_now_add=True)
+    returned_time = models.TimeField(null=True, blank=True)
 
 
 class ReturnableMaterials(models.Model):
@@ -90,9 +92,10 @@ class MaterialOutward(models.Model):
 
 class MaterialInward(models.Model):
 
+    id = models.AutoField(primary_key=True)
     date = models.DateField(auto_now_add=True)
     # vehicle_picture
-    invoice_num = models.CharField()
+    invoice_num = models.CharField(max_length=255)
     in_time = models.TimeField(auto_now_add=True)
     out_time = models.TimeField(blank=True, null=True)
 

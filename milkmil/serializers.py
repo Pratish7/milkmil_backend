@@ -31,6 +31,7 @@ class KeysSerializer(serializers.ModelSerializer):
     class Meta:
         model = Keys
         fields = '__all__'
+        read_only_fields = ['id']
 
 
 class ReturnableMaterialsSerializer(serializers.ModelSerializer):
@@ -38,6 +39,7 @@ class ReturnableMaterialsSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReturnableMaterials
         fields = '__all__'
+        read_only_fields = ['id', 'date', 'in_date', 'in_time', 'out_date', 'out_time']
 
 
 class MasterDataSerializer(serializers.ModelSerializer):
@@ -52,6 +54,7 @@ class MaterialOutwardSerializer(serializers.ModelSerializer):
     class Meta:
         model = MaterialOutward
         fields = '__all__'
+        read_only_fields = ['id', 'date', 'time']
 
 
 class MaterialInwardSerializer(serializers.ModelSerializer):
@@ -59,3 +62,4 @@ class MaterialInwardSerializer(serializers.ModelSerializer):
     class Meta:
         model = MaterialInward
         fields = '__all__'
+        read_only_fields = ['id', 'date', 'in_time']
