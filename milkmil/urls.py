@@ -30,6 +30,9 @@ vehicle_report_router.register('vehicle-report', views.VehicleReportView, basena
 keys_router = routers.SimpleRouter()
 keys_router.register('keys', views.KeyView, basename='keys')
 
+keys_report_router = routers.SimpleRouter()
+keys_report_router.register('key-report', views.KeyReportView, basename='key-report')
+
 returnable_materials_router = routers.SimpleRouter()
 returnable_materials_router.register('returnablematerials', views.ReturnableMaterialsView, basename='returnablematerials')
 
@@ -70,4 +73,5 @@ urlpatterns = [
     path('', include(material_outward_report_router.urls)),
     path('', include(material_inward_report_router.urls)),
     path('', include(returnable_materials_report_router.urls)),
+    path('', include(keys_report_router.urls)),
 ]
