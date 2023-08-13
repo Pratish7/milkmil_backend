@@ -24,6 +24,9 @@ milk_report_router.register('milk-report', views.MilkReportView, basename='milk-
 vehicle_router = routers.SimpleRouter()
 vehicle_router.register('vehicle', views.VehicleView, basename='vehicle')
 
+vehicle_report_router = routers.SimpleRouter()
+vehicle_report_router.register('vehicle-report', views.VehicleReportView, basename='vehicle-report')
+
 keys_router = routers.SimpleRouter()
 keys_router.register('keys', views.KeyView, basename='keys')
 
@@ -50,4 +53,5 @@ urlpatterns = [
     path('', include(update_guest_out.urls)),
     path('', include(milk_report_router.urls)),
     path('', include(guests_report_router.urls)),
+    path('', include(vehicle_report_router.urls)),
 ]
