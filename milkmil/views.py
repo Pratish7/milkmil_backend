@@ -125,6 +125,8 @@ class MilkReportView(viewsets.GenericViewSet,  mixins.ListModelMixin):
         from_date = request.query_params.get('from_date')
         to_date = request.query_params.get('to_date')
         queryset = queryset.filter(date__gte=from_date, date__lte=to_date)
+        if not queryset:
+            return Response({'message': 'No data found'}, status=status.HTTP_404_NOT_FOUND)
         df = pd.DataFrame.from_records(queryset.values())
         df = df.drop(columns=['id'])
         excel_buffer = io.BytesIO()
@@ -148,6 +150,8 @@ class GuestsReportView(viewsets.GenericViewSet,  mixins.ListModelMixin):
         from_date = request.query_params.get('from_date')
         to_date = request.query_params.get('to_date')
         queryset = queryset.filter(in_date__gte=from_date, in_date__lte=to_date)
+        if not queryset:
+            return Response({'message': 'No data found'}, status=status.HTTP_404_NOT_FOUND)
         df = pd.DataFrame.from_records(queryset.values())
         df = df.drop(columns=['id'])
         excel_buffer = io.BytesIO()
@@ -171,6 +175,8 @@ class VehicleReportView(viewsets.GenericViewSet,  mixins.ListModelMixin):
         from_date = request.query_params.get('from_date')
         to_date = request.query_params.get('to_date')
         queryset = queryset.filter(date__gte=from_date, date__lte=to_date)
+        if not queryset:
+            return Response({'message': 'No data found'}, status=status.HTTP_404_NOT_FOUND)
         df = pd.DataFrame.from_records(queryset.values())
         excel_buffer = io.BytesIO()
         df.to_excel(excel_buffer, index=False)
@@ -193,6 +199,8 @@ class MaterialOutwardReportView(viewsets.GenericViewSet,  mixins.ListModelMixin)
         from_date = request.query_params.get('from_date')
         to_date = request.query_params.get('to_date')
         queryset = queryset.filter(date__gte=from_date, date__lte=to_date)
+        if not queryset:
+            return Response({'message': 'No data found'}, status=status.HTTP_404_NOT_FOUND)
         df = pd.DataFrame.from_records(queryset.values())
         df = df.drop(columns=['id'])
         excel_buffer = io.BytesIO()
@@ -216,6 +224,8 @@ class MaterialInwardReportView(viewsets.GenericViewSet,  mixins.ListModelMixin):
         from_date = request.query_params.get('from_date')
         to_date = request.query_params.get('to_date')
         queryset = queryset.filter(date__gte=from_date, date__lte=to_date)
+        if not queryset:
+            return Response({'message': 'No data found'}, status=status.HTTP_404_NOT_FOUND)
         df = pd.DataFrame.from_records(queryset.values())
         df = df.drop(columns=['id'])
         excel_buffer = io.BytesIO()
@@ -239,6 +249,8 @@ class ReturnableMaterialsReportView(viewsets.GenericViewSet,  mixins.ListModelMi
         from_date = request.query_params.get('from_date')
         to_date = request.query_params.get('to_date')
         queryset = queryset.filter(out_date__gte=from_date, out_date__lte=to_date)
+        if not queryset:
+            return Response({'message': 'No data found'}, status=status.HTTP_404_NOT_FOUND)
         df = pd.DataFrame.from_records(queryset.values())
         df = df.drop(columns=['id'])
         excel_buffer = io.BytesIO()
@@ -262,6 +274,8 @@ class KeyReportView(viewsets.GenericViewSet,  mixins.ListModelMixin):
         from_date = request.query_params.get('from_date')
         to_date = request.query_params.get('to_date')
         queryset = queryset.filter(date__gte=from_date, date__lte=to_date)
+        if not queryset:
+            return Response({'message': 'No data found'}, status=status.HTTP_404_NOT_FOUND)
         df = pd.DataFrame.from_records(queryset.values())
         df = df.drop(columns=['id'])
         excel_buffer = io.BytesIO()
