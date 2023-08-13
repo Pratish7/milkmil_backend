@@ -6,6 +6,12 @@ from milkmil import views
 guests_router = routers.SimpleRouter()
 guests_router.register('guests', views.GuestsView, basename='guests')
 
+guests_in_router = routers.SimpleRouter()
+guests_in_router.register('guests-in', views.GuestsInView, basename='guests-in')
+
+update_guest_out = routers.SimpleRouter()
+update_guest_out.register('guest-out', views.GuestsOutUpdateView, basename='guest-out')
+
 milk_router = routers.SimpleRouter()
 milk_router.register('milk', views.MilkView, basename='milk')
 
@@ -34,4 +40,6 @@ urlpatterns = [
     path('', include(returnable_materials_router.urls)),
     path('', include(master_data_router.urls)),
     path('', include(material_outward_router.urls)),
+    path('', include(guests_in_router.urls)),
+    path('', include(update_guest_out.urls)),
 ]

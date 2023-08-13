@@ -57,3 +57,11 @@ class MaterialInwardFilter(filters.BaseFilterBackend):
     def filter_queryset(self, request, queryset, view):
 
         return queryset
+    
+
+class GuestsInFilter(filters.BaseFilterBackend):
+
+    def filter_queryset(self, request, queryset, view):
+
+        queryset = queryset.filter(out_date__isnull=True, out_time__isnull=True)
+        return queryset

@@ -4,7 +4,10 @@ from rest_framework.authentication import TokenAuthentication, SessionAuthentica
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from milkmil.serializers import GuestsSerializer, MilkSerializer, VehicleSerializer, KeysSerializer, ReturnableMaterialsSerializer, MasterDataSerializer, MaterialOutwardSerializer, MaterialInwardSerializer
 from rest_framework.filters import SearchFilter
-from milkmil.filters import GuestsFilter, MilkFilter, VehicleFilter, KeyFilter, ReturnableMaterialsFilter, MasterDataFilter, MaterialOutwardFilter, MaterialInwardFilter
+from milkmil.filters import GuestsFilter, MilkFilter, VehicleFilter, KeyFilter, ReturnableMaterialsFilter, MasterDataFilter, MaterialOutwardFilter, MaterialInwardFilter, GuestsInFilter
+from rest_framework import status
+from rest_framework.response import Response
+from django.utils import timezone
 
 
 class GuestsView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
@@ -77,3 +80,31 @@ class MaterialInwardView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins
     serializer_class = MaterialInwardSerializer
     filter_backends = [MaterialInwardFilter, SearchFilter]
     search_fields = []
+
+
+class GuestsInView(viewsets.GenericViewSet,  mixins.ListModelMixin):
+    authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
+    permission_classes = ()
+    queryset = Guests.objects.all()
+    serializer_class = GuestsSerializer
+    filter_backends = [GuestsInFilter, SearchFilter]
+    search_fields = ['id', 'visitor_name', 'employee_name', 'relationship', 'in_time', 'out_time']
+
+
+class GuestsOutUpdateView(viewsets.GenericViewSet,  mixins.UpdateModelMixin):
+    authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
+    permission_classes = ()
+    queryset = Guests.objects.all()
+    serializer_class = GuestsSerializer
+    
+    def update(self, request, *args, **kwargs):
+        
+        if 'status' not in request.data or request.data.get('status') != 'out':
+            return Response({'status': 'status is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        instance = self.get_object()
+        instance.out_date = timezone.now().date()
+        instance.out_time = timezone.now().time()
+        instance.save()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)

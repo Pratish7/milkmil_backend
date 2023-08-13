@@ -11,8 +11,8 @@ class Guests(models.Model):
     organization = models.CharField(max_length=255)
     in_date = models.DateField(auto_now_add=True)
     in_time = models.TimeField(auto_now_add=True)
-    out_date = models.DateField(null=True, blank=True)
-    out_time = models.TimeField(null=True, blank=True)
+    out_date = models.DateField(null=True, default=None)
+    out_time = models.TimeField(null=True, default=None)
     # image_url = models.CharField(max_length=2000, null=True, blank=True)
 
 
