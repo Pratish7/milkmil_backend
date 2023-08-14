@@ -1,9 +1,11 @@
 from rest_framework import viewsets, mixins
 from milk_mil_backend.users.models import UserTypes
 from django.contrib.auth import get_user_model
+from rest_framework.permissions import IsAuthenticated
 from milkmil.models import Guests, Milk, Vehicle, Keys, ReturnableMaterials, MasterData, MaterialOutward, MaterialInward
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from milkmil.permissions import CanViewReport, CanWriteGuest, CanWriteKeys, CanWriteMasterData, CanWriteMaterialInward, CanWriteMaterialOutward, CanWriteMilk, CanWriteReturnableMaterials, CanWriteVehicle, IsReportAdmin
 from milkmil.serializers import GuestsSerializer, MilkSerializer, VehicleSerializer, KeysSerializer, ReturnableMaterialsSerializer, MasterDataSerializer, MaterialOutwardSerializer, MaterialInwardSerializer, UserTypesSerializer, RegisterUserSerializer, LoginUserSerializer
 from rest_framework.filters import SearchFilter
 from milkmil.filters import GuestsFilter, MilkFilter, VehicleFilter, KeyFilter, ReturnableMaterialsFilter, MasterDataFilter, MaterialOutwardFilter, MaterialInwardFilter, GuestsInFilter, MaterialInwardQueueFilter, MaterialOutwardQueueFilter, ReturnableMaterialsQueueFilter
@@ -19,7 +21,7 @@ from rest_framework.authtoken.models import Token
 
 class GuestsView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated, CanWriteGuest)
     queryset = Guests.objects.all()
     serializer_class = GuestsSerializer
     filter_backends = [GuestsFilter, SearchFilter]
@@ -28,7 +30,7 @@ class GuestsView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateM
 
 class MilkView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated, CanWriteMilk)
     queryset = Milk.objects.all()
     serializer_class = MilkSerializer
     filter_backends = [MilkFilter, SearchFilter]
@@ -37,7 +39,7 @@ class MilkView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateMod
 
 class VehicleView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated, CanWriteVehicle)
     queryset = Vehicle.objects.all()
     serializer_class = VehicleSerializer
     filter_backends = [VehicleFilter, SearchFilter]
@@ -46,7 +48,7 @@ class VehicleView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.Create
 
 class KeyView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated, CanWriteKeys)
     queryset = Keys.objects.all()
     serializer_class = KeysSerializer
     filter_backends = [KeyFilter, SearchFilter]
@@ -55,7 +57,7 @@ class KeyView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateMode
 
 class ReturnableMaterialsView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated, CanWriteReturnableMaterials)
     queryset = ReturnableMaterials.objects.all()
     serializer_class = ReturnableMaterialsSerializer
     filter_backends = [ReturnableMaterialsFilter, SearchFilter]
@@ -64,7 +66,7 @@ class ReturnableMaterialsView(viewsets.GenericViewSet,  mixins.ListModelMixin, m
 
 class MasterDataView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated, CanWriteMasterData)
     queryset = MasterData.objects.all()
     serializer_class = MasterDataSerializer
     filter_backends = [MasterDataFilter, SearchFilter]
@@ -73,7 +75,7 @@ class MasterDataView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.Cre
 
 class MaterialOutwardView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated, CanWriteMaterialOutward)
     queryset = MaterialOutward.objects.all()
     serializer_class = MaterialOutwardSerializer
     filter_backends = [MaterialOutwardFilter, SearchFilter]
@@ -82,7 +84,7 @@ class MaterialOutwardView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixin
 
 class MaterialInwardView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated, CanWriteMaterialInward)
     queryset = MaterialInward.objects.all()
     serializer_class = MaterialInwardSerializer
     filter_backends = [MaterialInwardFilter, SearchFilter]
@@ -91,7 +93,7 @@ class MaterialInwardView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins
 
 class GuestsInView(viewsets.GenericViewSet,  mixins.ListModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated, CanWriteGuest)
     queryset = Guests.objects.all()
     serializer_class = GuestsSerializer
     filter_backends = [GuestsInFilter, SearchFilter]
@@ -100,7 +102,7 @@ class GuestsInView(viewsets.GenericViewSet,  mixins.ListModelMixin):
 
 class GuestsOutUpdateView(viewsets.GenericViewSet,  mixins.UpdateModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated, CanWriteGuest)
     queryset = Guests.objects.all()
     serializer_class = GuestsSerializer
     
@@ -119,7 +121,7 @@ class GuestsOutUpdateView(viewsets.GenericViewSet,  mixins.UpdateModelMixin):
 
 class MilkReportView(viewsets.GenericViewSet,  mixins.ListModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated, CanViewReport)
     queryset = Milk.objects.all()
 
     def list(self, request, *args, **kwargs):
@@ -144,7 +146,7 @@ class MilkReportView(viewsets.GenericViewSet,  mixins.ListModelMixin):
 
 class GuestsReportView(viewsets.GenericViewSet,  mixins.ListModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated, CanViewReport)
     queryset = Guests.objects.all()
 
     def list(self, request, *args, **kwargs):
@@ -169,7 +171,7 @@ class GuestsReportView(viewsets.GenericViewSet,  mixins.ListModelMixin):
 
 class VehicleReportView(viewsets.GenericViewSet,  mixins.ListModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated, CanViewReport)
     queryset = Vehicle.objects.all()
 
     def list(self, request, *args, **kwargs):
@@ -193,7 +195,7 @@ class VehicleReportView(viewsets.GenericViewSet,  mixins.ListModelMixin):
 
 class MaterialOutwardReportView(viewsets.GenericViewSet,  mixins.ListModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated, CanViewReport)
     queryset = MaterialOutward.objects.all()
 
     def list(self, request, *args, **kwargs):
@@ -218,7 +220,7 @@ class MaterialOutwardReportView(viewsets.GenericViewSet,  mixins.ListModelMixin)
 
 class MaterialInwardReportView(viewsets.GenericViewSet,  mixins.ListModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated, CanViewReport)
     queryset = MaterialInward.objects.all()
 
     def list(self, request, *args, **kwargs):
@@ -243,7 +245,7 @@ class MaterialInwardReportView(viewsets.GenericViewSet,  mixins.ListModelMixin):
 
 class ReturnableMaterialsReportView(viewsets.GenericViewSet,  mixins.ListModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated, CanViewReport)
     queryset = ReturnableMaterials.objects.all()
 
     def list(self, request, *args, **kwargs):
@@ -268,7 +270,7 @@ class ReturnableMaterialsReportView(viewsets.GenericViewSet,  mixins.ListModelMi
 
 class KeyReportView(viewsets.GenericViewSet,  mixins.ListModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated, CanViewReport)
     queryset = Keys.objects.all()
 
     def list(self, request, *args, **kwargs):
@@ -293,7 +295,7 @@ class KeyReportView(viewsets.GenericViewSet,  mixins.ListModelMixin):
 
 class MaterialInwardQueueView(viewsets.GenericViewSet,  mixins.ListModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated, CanWriteMaterialInward)
     queryset = MaterialInward.objects.all()
     serializer_class = MaterialInwardSerializer
     filter_backends = [MaterialInwardQueueFilter, SearchFilter]
@@ -301,7 +303,7 @@ class MaterialInwardQueueView(viewsets.GenericViewSet,  mixins.ListModelMixin):
 
 class MaterialInwardUpdateView(viewsets.GenericViewSet,  mixins.UpdateModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated, CanWriteMaterialInward)
     queryset = MaterialInward.objects.all()
     serializer_class = MaterialInwardSerializer
     
@@ -319,7 +321,7 @@ class MaterialInwardUpdateView(viewsets.GenericViewSet,  mixins.UpdateModelMixin
 
 class MaterialOutwardQueueView(viewsets.GenericViewSet,  mixins.ListModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated, CanWriteMaterialOutward)
     queryset = MaterialOutward.objects.all()
     serializer_class = MaterialOutwardSerializer
     filter_backends = [MaterialOutwardQueueFilter, SearchFilter]
@@ -327,7 +329,7 @@ class MaterialOutwardQueueView(viewsets.GenericViewSet,  mixins.ListModelMixin):
 
 class MaterialOutwardUpdateView(viewsets.GenericViewSet,  mixins.UpdateModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated, CanWriteMaterialOutward)
     queryset = MaterialOutward.objects.all()
     serializer_class = MaterialOutwardSerializer
     
@@ -345,7 +347,7 @@ class MaterialOutwardUpdateView(viewsets.GenericViewSet,  mixins.UpdateModelMixi
 
 class ReturnableMaterialsQueueView(viewsets.GenericViewSet,  mixins.ListModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated, CanWriteReturnableMaterials)
     queryset = ReturnableMaterials.objects.all()
     serializer_class = ReturnableMaterialsSerializer
     filter_backends = [ReturnableMaterialsQueueFilter, SearchFilter]
@@ -353,7 +355,7 @@ class ReturnableMaterialsQueueView(viewsets.GenericViewSet,  mixins.ListModelMix
 
 class ReturnableMaterialsUpdateView(viewsets.GenericViewSet,  mixins.UpdateModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated, CanWriteReturnableMaterials)
     queryset = ReturnableMaterials.objects.all()
     serializer_class = ReturnableMaterialsSerializer
     
@@ -373,7 +375,7 @@ class ReturnableMaterialsUpdateView(viewsets.GenericViewSet,  mixins.UpdateModel
 
 class UserTypesView(mixins.ListModelMixin, viewsets.GenericViewSet):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated)
     queryset = UserTypes.objects.all()
     serializer_class = UserTypesSerializer
 
