@@ -8,12 +8,12 @@ class Guests(models.Model):
     visitor_name = models.CharField(max_length=255)
     employee_name = models.CharField(max_length=255)
     relationship = models.CharField(max_length=255, null=True, blank=True)
-    organization = models.CharField(max_length=255)
+    organization = models.CharField(max_length=255, null=True, blank=True)
     in_date = models.DateField(auto_now_add=True)
     in_time = models.TimeField(auto_now_add=True)
     out_date = models.DateField(null=True, default=None)
     out_time = models.TimeField(null=True, default=None)
-    # image_url = models.CharField(max_length=2000, null=True, blank=True)
+    image = models.TextField(null=True, blank=True)
 
 
 class Milk(models.Model):
@@ -94,7 +94,7 @@ class MaterialInward(models.Model):
 
     id = models.AutoField(primary_key=True)
     date = models.DateField(auto_now_add=True)
-    # vehicle_picture
+    image = models.TextField(null=True, blank=True)
     invoice_num = models.CharField(max_length=255)
     in_time = models.TimeField(auto_now_add=True)
     out_time = models.TimeField(blank=True, null=True)
