@@ -3,6 +3,7 @@ from milk_mil_backend.users.models import UserTypes
 from milkmil.models import Guests, Milk, Vehicle, Keys, ReturnableMaterials, MasterData, MaterialOutward, MaterialInward
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
 class GuestsSerializer(serializers.ModelSerializer):
@@ -97,3 +98,22 @@ class LoginUserSerializer(serializers.ModelSerializer):
 
     email = serializers.CharField(required=True)
     password = serializers.CharField(required=True)
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        user_permissions = []
+        perms = UserTypes.objects.filter(user=user)
+        for i in perms:
+            user_permissions.append(i.user_type)
+        token['user_type'] = user_permissions
+        token['name'] = user.name
+        token['email'] = user.email
+        return token
+
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        return data

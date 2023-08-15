@@ -5,8 +5,8 @@ from rest_framework.permissions import IsAuthenticated
 from milkmil.models import Guests, Milk, Vehicle, Keys, ReturnableMaterials, MasterData, MaterialOutward, MaterialInward
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from milkmil.permissions import CanViewReport, CanWriteGuest, CanWriteKeys, CanWriteMasterData, CanWriteMaterialInward, CanWriteMaterialOutward, CanWriteMilk, CanWriteReturnableMaterials, CanWriteVehicle, IsReportAdmin
-from milkmil.serializers import GuestsSerializer, MilkSerializer, VehicleSerializer, KeysSerializer, ReturnableMaterialsSerializer, MasterDataSerializer, MaterialOutwardSerializer, MaterialInwardSerializer, UserTypesSerializer, RegisterUserSerializer, LoginUserSerializer
+from milkmil.permissions import CanViewReport, CanWriteGuest, CanWriteKeys, CanWriteMasterData, CanWriteMaterialInward, CanWriteMaterialOutward, CanWriteMilk, CanWriteReturnableMaterials, CanWriteVehicle
+from milkmil.serializers import GuestsSerializer, MilkSerializer, MyTokenObtainPairSerializer, VehicleSerializer, KeysSerializer, ReturnableMaterialsSerializer, MasterDataSerializer, MaterialOutwardSerializer, MaterialInwardSerializer, UserTypesSerializer, RegisterUserSerializer, LoginUserSerializer
 from rest_framework.filters import SearchFilter
 from milkmil.filters import GuestsFilter, MilkFilter, VehicleFilter, KeyFilter, ReturnableMaterialsFilter, MasterDataFilter, MaterialOutwardFilter, MaterialInwardFilter, GuestsInFilter, MaterialInwardQueueFilter, MaterialOutwardQueueFilter, ReturnableMaterialsQueueFilter
 from rest_framework import status
@@ -375,7 +375,7 @@ class ReturnableMaterialsUpdateView(viewsets.GenericViewSet,  mixins.UpdateModel
 
 class UserTypesView(mixins.ListModelMixin, viewsets.GenericViewSet):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = (IsAuthenticated)
+    permission_classes = ()
     queryset = UserTypes.objects.all()
     serializer_class = UserTypesSerializer
 
@@ -403,5 +403,7 @@ class LoginUserView(viewsets.GenericViewSet, mixins.CreateModelMixin):
         if not user:
             return Response({'message': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
         
-        token = Token.objects.create(user=user)
-        return Response({'token': token.key})
+        token = Token.objects.get_or_create(user=user)[0]
+        jw_token = MyTokenObtainPairSerializer.get_token(user)
+
+        return Response({'auth_token': token.key, 'jwt': str(jw_token)})
