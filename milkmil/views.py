@@ -6,7 +6,7 @@ from milkmil.models import Guests, Milk, Vehicle, Keys, ReturnableMaterials, Mas
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from milkmil.permissions import CanViewReport, CanWriteGuest, CanWriteKeys, CanWriteMasterData, CanWriteMaterialInward, CanWriteMaterialOutward, CanWriteMilk, CanWriteReturnableMaterials, CanWriteVehicle
-from milkmil.serializers import GuestsSerializer, MilkSerializer, MyTokenObtainPairSerializer, VehicleSerializer, KeysSerializer, ReturnableMaterialsSerializer, MasterDataSerializer, MaterialOutwardSerializer, MaterialInwardSerializer, UserTypesSerializer, RegisterUserSerializer, LoginUserSerializer
+from milkmil.serializers import GuestsSerializer, MilkSerializer, VehicleSerializer, KeysSerializer, ReturnableMaterialsSerializer, MasterDataSerializer, MaterialOutwardSerializer, MaterialInwardSerializer, UserTypesSerializer, RegisterUserSerializer, LoginUserSerializer
 from rest_framework.filters import SearchFilter
 from milkmil.filters import GuestsFilter, MilkFilter, VehicleFilter, KeyFilter, ReturnableMaterialsFilter, MasterDataFilter, MaterialOutwardFilter, MaterialInwardFilter, GuestsInFilter, MaterialInwardQueueFilter, MaterialOutwardQueueFilter, ReturnableMaterialsQueueFilter
 from rest_framework import status
@@ -404,6 +404,15 @@ class LoginUserView(viewsets.GenericViewSet, mixins.CreateModelMixin):
             return Response({'message': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
         
         token = Token.objects.get_or_create(user=user)[0]
-        jw_token = MyTokenObtainPairSerializer.get_token(user)
+        user_data = {}
+        user_data['id'] = user.id
+        user_data['email'] = user.email
+        user_data['name'] = user.name
 
-        return Response({'auth_token': token.key, 'jwt': str(jw_token)})
+        user_permissions = []
+        perms = UserTypes.objects.filter(user=user)
+        for i in perms:
+            user_permissions.append(i.user_type)
+        user_data['user_type'] = user_permissions
+
+        return Response({'auth_token': token.key, 'user': user_data})

@@ -98,22 +98,3 @@ class LoginUserSerializer(serializers.ModelSerializer):
 
     email = serializers.CharField(required=True)
     password = serializers.CharField(required=True)
-
-
-class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    @classmethod
-    def get_token(cls, user):
-        token = super().get_token(user)
-        user_permissions = []
-        perms = UserTypes.objects.filter(user=user)
-        for i in perms:
-            user_permissions.append(i.user_type)
-        token['user_type'] = user_permissions
-        token['name'] = user.name
-        token['email'] = user.email
-        return token
-
-    def validate(self, attrs):
-        data = super().validate(attrs)
-
-        return data
