@@ -12,7 +12,7 @@ class CanWriteGuest(BasePermission):
         perms = UserTypes.objects.filter(user=request.user)
         for i in perms:
             user_permissions.append(i.id)
-        if 10 in user_permissions or 1 in user_permissions:
+        if 14 in user_permissions:
             return True
         return False
     
@@ -26,7 +26,7 @@ class CanWriteMilk(BasePermission):
         perms = UserTypes.objects.filter(user=request.user)
         for i in perms:
             user_permissions.append(i.id)
-        if 1 in user_permissions:
+        if 14 in user_permissions:
             return True
         return False
     
@@ -40,7 +40,7 @@ class CanWriteVehicle(BasePermission):
         perms = UserTypes.objects.filter(user=request.user)
         for i in perms:
             user_permissions.append(i.id)
-        if 1 in user_permissions or 11 in user_permissions:
+        if 14 in user_permissions or 11 in user_permissions:
             return True
         return False
     
@@ -54,7 +54,7 @@ class CanWriteKeys(BasePermission):
         perms = UserTypes.objects.filter(user=request.user)
         for i in perms:
             user_permissions.append(i.id)
-        if 1 in user_permissions:
+        if 14 in user_permissions:
             return True
         return False
     
@@ -68,7 +68,7 @@ class CanWriteReturnableMaterials(BasePermission):
         perms = UserTypes.objects.filter(user=request.user)
         for i in perms:
             user_permissions.append(i.id)
-        if 1 in user_permissions:
+        if 14 in user_permissions:
             return True
         return False
     
@@ -82,7 +82,7 @@ class CanWriteMasterData(BasePermission):
         perms = UserTypes.objects.filter(user=request.user)
         for i in perms:
             user_permissions.append(i.id)
-        if 8 in user_permissions:
+        if 1 in user_permissions:
             return True
         return False
     
@@ -95,7 +95,7 @@ class CanWriteMaterialOutward(BasePermission):
         perms = UserTypes.objects.filter(user=request.user)
         for i in perms:
             user_permissions.append(i.id)
-        if 1 in user_permissions:
+        if 14 in user_permissions:
             return True
         return False
     
@@ -109,7 +109,7 @@ class CanWriteMaterialInward(BasePermission):
         perms = UserTypes.objects.filter(user=request.user)
         for i in perms:
             user_permissions.append(i.id)
-        if 1 in user_permissions:
+        if 14 in user_permissions:
             return True
         return False
     
@@ -123,6 +123,6 @@ class CanViewReport(BasePermission):
         perms = UserTypes.objects.filter(user=request.user)
         for i in perms:
             user_permissions.append(i.id)
-        if 7 in user_permissions:
+        if 13 in user_permissions:
             return True
         return False

@@ -3,84 +3,106 @@
       "model": "users.UserTypes",
       "pk": 1,
       "fields": {
-        "user_type": "Data Entry"
+        "user_type": "MANAGING DIRECTOR"
       }
     },
     {
       "model": "users.UserTypes",
       "pk": 2,
       "fields": {
-        "user_type": "QR Code Scan"
+        "user_type": "FACTORY MANAGER"
       }
     },
     {
       "model": "users.UserTypes",
       "pk": 3,
       "fields": {
-        "user_type": "Photo Clicking"
+        "user_type": "QUALITY MANAGER"
       }
     },
     {
       "model": "users.UserTypes",
       "pk": 4,
       "fields": {
-        "user_type": "Report Admin"
+        "user_type": "TECHNICAL HEAD"
       }
     },
     {
       "model": "users.UserTypes",
       "pk": 5,
       "fields": {
-        "user_type": "Material Inward"
+        "user_type": "PRODUCTION MANAGER"
       }
     },
     {
       "model": "users.UserTypes",
       "pk": 6,
       "fields": {
-        "user_type": "Material Outward"
+        "user_type": "ELECTRICAL ENGINEER"
       }
     },
     {
       "model": "users.UserTypes",
       "pk": 7,
       "fields": {
-        "user_type": "Report View"
+        "user_type": "STORE KEEPER"
       }
     },
     {
       "model": "users.UserTypes",
       "pk": 8,
       "fields": {
-        "user_type": "Master Data Admin"
+        "user_type": "HR MANAGER"
       }
     },
     {
       "model": "users.UserTypes",
       "pk": 9,
       "fields": {
-        "user_type": "Transaction Admin"
+        "user_type": "VEHICLE INCHARGE"
       }
     },
     {
       "model": "users.UserTypes",
       "pk": 10,
       "fields": {
-        "user_type": "Visitors Admin"
+        "user_type": "ERP MANAGER"
       }
     },
     {
       "model": "users.UserTypes",
       "pk": 11,
       "fields": {
-        "user_type": "Vehicle Admin"
+        "user_type": "CANTEEN INCHARGE"
       }
     },
     {
       "model": "users.UserTypes",
       "pk": 12,
       "fields": {
-        "user_type": "Status View"
+        "user_type": "DESPATCH INCHARGE "
       }
-    }
+    },
+    {
+      "model": "users.UserTypes",
+      "pk": 13,
+      "fields": {
+        "user_type": "REPORT ADMIN"
+      }
+    },
+    {
+      "model": "users.UserTypes",
+      "pk": 14,
+      "fields": {
+        "user_type": "POSIFLEX POS TOUCH SCREEN MONITOR"
+      }
+    },
+    {
+      "model": "users.UserTypes",
+      "pk": 15,
+      "fields": {
+        "user_type": "SAMSUNG PHONE"
+      }
+    },
+
   ]
