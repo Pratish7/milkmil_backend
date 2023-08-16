@@ -27,3 +27,4 @@ google-cloud-storage
 pandas
 openpyxl
 django-storages
+python-barcode
