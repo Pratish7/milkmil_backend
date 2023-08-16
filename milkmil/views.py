@@ -2,11 +2,11 @@ from rest_framework import viewsets, mixins
 from milk_mil_backend.users.models import UserTypes
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAuthenticated
-from milkmil.models import Guests, Milk, Vehicle, Keys, ReturnableMaterials, MasterData, MaterialOutward, MaterialInward
+from milkmil.models import BarCode, Guests, Milk, Vehicle, Keys, ReturnableMaterials, MasterData, MaterialOutward, MaterialInward
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from milkmil.permissions import CanViewReport, CanWriteGuest, CanWriteKeys, CanWriteMasterData, CanWriteMaterialInward, CanWriteMaterialOutward, CanWriteMilk, CanWriteReturnableMaterials, CanWriteVehicle
-from milkmil.serializers import GuestsSerializer, MilkSerializer, VehicleSerializer, KeysSerializer, ReturnableMaterialsSerializer, MasterDataSerializer, MaterialOutwardSerializer, MaterialInwardSerializer, UserTypesSerializer, RegisterUserSerializer, LoginUserSerializer
+from milkmil.serializers import BarCodeSerializer, GuestsSerializer, MilkSerializer, VehicleSerializer, KeysSerializer, ReturnableMaterialsSerializer, MasterDataSerializer, MaterialOutwardSerializer, MaterialInwardSerializer, UserTypesSerializer, RegisterUserSerializer, LoginUserSerializer
 from rest_framework.filters import SearchFilter
 from milkmil.filters import GuestsFilter, MilkFilter, VehicleFilter, KeyFilter, ReturnableMaterialsFilter, MasterDataFilter, MaterialOutwardFilter, MaterialInwardFilter, GuestsInFilter, MaterialInwardQueueFilter, MaterialOutwardQueueFilter, ReturnableMaterialsQueueFilter
 from rest_framework import status
@@ -17,6 +17,12 @@ from milkmil.utils import upload_file_to_gcp, generate_download_link
 import io
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
+from barcode import generate
+from barcode.writer import ImageWriter
+from io import BytesIO
+import base64
+import barcode
+
 
 
 class GuestsView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
@@ -416,3 +422,21 @@ class LoginUserView(viewsets.GenericViewSet, mixins.CreateModelMixin):
         user_data['user_type'] = user_permissions
 
         return Response({'auth_token': token.key, 'user': user_data})
+
+
+class BarCodeView(viewsets.GenericViewSet, mixins.CreateModelMixin):
+    authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
+    permission_classes = ()
+    queryset = BarCode.objects.all()
+    serializer_class = BarCodeSerializer
+
+    def create(self, request, *args, **kwargs):
+
+        barcode_value = "123456789012"
+        barcode_image = barcode.get('ean13', barcode_value, writer=ImageWriter())
+        buffer = BytesIO()
+        barcode_image.write(buffer)
+        base64_image = base64.b64encode(buffer.getvalue()).decode('utf-8')
+        return Response({'barcode': base64_image})
+
+

@@ -104,3 +104,10 @@ class MasterData(models.Model):
 
     key = models.CharField(max_length=255, primary_key=True)
     values = ArrayField(models.CharField())
+
+
+class BarCode(models.Model):
+
+    id = models.AutoField(primary_key=True)
+    barcode = models.TextField()
+    invoice_num = models.DateField(auto_now_add=True)
