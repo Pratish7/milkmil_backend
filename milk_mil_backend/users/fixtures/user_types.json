@@ -94,14 +94,14 @@
       "model": "users.UserTypes",
       "pk": 14,
       "fields": {
-        "user_type": "POSIFLEX POS TOUCH SCREEN MONITOR"
+        "user_type": "POSIFLEX POS TOUCH SCREEN MONITOR - DATA ENTRY"
       }
     },
     {
       "model": "users.UserTypes",
       "pk": 15,
       "fields": {
-        "user_type": "SAMSUNG PHONE"
+        "user_type": "SAMSUNG PHONE - QR PHOTO DATA ENTRY"
       }
     },
 
