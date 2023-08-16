@@ -22,6 +22,7 @@ from barcode.writer import ImageWriter
 from io import BytesIO
 import base64
 import barcode
+from datetime import date
 
 
 
@@ -432,11 +433,21 @@ class BarCodeView(viewsets.GenericViewSet, mixins.CreateModelMixin):
 
     def create(self, request, *args, **kwargs):
 
-        barcode_value = "123456789012"
+        bar_code_last_suffix = BarCode.objects.last()
+        if not bar_code_last_suffix:
+            bar_code_last_suffix = 1000
+        else:
+            if bar_code_last_suffix.invoice_num[:8] != str(date.today()).replace('-', ''):
+                bar_code_last_suffix = 1000
+            else:
+                bar_code_last_suffix = int(bar_code_last_suffix.invoice_num[-4:])
+
+        barcode_value = str(date.today()).replace('-', '') + str(bar_code_last_suffix + 1)
         barcode_image = barcode.get('ean13', barcode_value, writer=ImageWriter())
         buffer = BytesIO()
         barcode_image.write(buffer)
         base64_image = base64.b64encode(buffer.getvalue()).decode('utf-8')
-        return Response({'barcode': base64_image})
+        BarCode.objects.create(invoice_num=barcode_value, barcode=base64_image).save()
+        return Response({'barcode': base64_image, 'value': barcode_value})
 
 

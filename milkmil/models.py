@@ -110,4 +110,4 @@ class BarCode(models.Model):
 
     id = models.AutoField(primary_key=True)
     barcode = models.TextField()
-    invoice_num = models.DateField(auto_now_add=True)
+    invoice_num = models.CharField()
