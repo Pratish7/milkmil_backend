@@ -422,6 +422,9 @@ class LoginUserView(viewsets.GenericViewSet, mixins.CreateModelMixin):
             user_permissions.append(i.user_type)
         user_data['user_type'] = user_permissions
 
+        if user.is_superuser:
+            user_data['user_type'] = ['superadmin']
+
         return Response({'auth_token': token.key, 'user': user_data})
 
 
