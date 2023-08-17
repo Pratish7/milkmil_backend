@@ -11,7 +11,7 @@ class GuestsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Guests
         fields = '__all__'
-        read_only_fields = ['id', 'in_date', 'in_time', 'out_date', 'out_time']
+        read_only_fields = ['id']
 
 
 class MilkSerializer(serializers.ModelSerializer):
@@ -19,7 +19,7 @@ class MilkSerializer(serializers.ModelSerializer):
     class Meta:
         model = Milk
         fields = '__all__'
-        read_only_fields = ['id', 'date', 'time']
+        read_only_fields = ['id']
 
 
 class VehicleSerializer(serializers.ModelSerializer):
@@ -43,7 +43,7 @@ class ReturnableMaterialsSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReturnableMaterials
         fields = '__all__'
-        read_only_fields = ['id', 'date', 'in_date', 'in_time', 'out_date', 'out_time', 'status']
+        read_only_fields = ['id']
 
 
 class MasterDataSerializer(serializers.ModelSerializer):
@@ -58,7 +58,7 @@ class MaterialOutwardSerializer(serializers.ModelSerializer):
     class Meta:
         model = MaterialOutward
         fields = '__all__'
-        read_only_fields = ['id', 'date', 'time', 'status']
+        read_only_fields = ['id']
 
 
 class MaterialInwardSerializer(serializers.ModelSerializer):
@@ -66,7 +66,7 @@ class MaterialInwardSerializer(serializers.ModelSerializer):
     class Meta:
         model = MaterialInward
         fields = '__all__'
-        read_only_fields = ['id', 'date', 'in_time']
+        read_only_fields = ['id']
 
     
 class UserTypesSerializer(serializers.ModelSerializer):

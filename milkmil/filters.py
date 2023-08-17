@@ -5,6 +5,10 @@ class GuestsFilter(filters.BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
 
+        req_date = request.query_params.get('date', None)
+        if req_date:
+            queryset = queryset.filter(in_date=req_date)
+
         return queryset
 
 
@@ -12,6 +16,10 @@ class MilkFilter(filters.BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
 
+        req_date = request.query_params.get('date', None)
+        if req_date:
+            queryset = queryset.filter(date=req_date)
+        
         return queryset
 
 
@@ -33,6 +41,10 @@ class ReturnableMaterialsFilter(filters.BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
 
+        req_date = request.query_params.get('date', None)
+        if req_date:
+            queryset = queryset.filter(in_date=req_date)
+
         return queryset
 
 
@@ -49,12 +61,20 @@ class MaterialOutwardFilter(filters.BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
 
+        req_date = request.query_params.get('date', None)
+        if req_date:
+            queryset = queryset.filter(date=req_date)
+
         return queryset
 
 
 class MaterialInwardFilter(filters.BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
+
+        req_date = request.query_params.get('date', None)
+        if req_date:
+            queryset = queryset.filter(date=req_date)
 
         return queryset
     

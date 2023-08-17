@@ -32,7 +32,6 @@ class GuestsView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateM
     queryset = Guests.objects.all()
     serializer_class = GuestsSerializer
     filter_backends = [GuestsFilter, SearchFilter]
-    search_fields = ['id', 'visitor_name', 'employee_name', 'relationship', 'in_time', 'out_time']
 
 
 class MilkView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
@@ -41,7 +40,6 @@ class MilkView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateMod
     queryset = Milk.objects.all()
     serializer_class = MilkSerializer
     filter_backends = [MilkFilter, SearchFilter]
-    search_fields = ['id', 'type', 'quantity', 'timestamp']
 
 
 class VehicleView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
@@ -50,7 +48,6 @@ class VehicleView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.Create
     queryset = Vehicle.objects.all()
     serializer_class = VehicleSerializer
     filter_backends = [VehicleFilter, SearchFilter]
-    search_fields = []
 
 
 class KeyView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
@@ -59,7 +56,6 @@ class KeyView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateMode
     queryset = Keys.objects.all()
     serializer_class = KeysSerializer
     filter_backends = [KeyFilter, SearchFilter]
-    search_fields = []
 
 
 class ReturnableMaterialsView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
@@ -68,7 +64,6 @@ class ReturnableMaterialsView(viewsets.GenericViewSet,  mixins.ListModelMixin, m
     queryset = ReturnableMaterials.objects.all()
     serializer_class = ReturnableMaterialsSerializer
     filter_backends = [ReturnableMaterialsFilter, SearchFilter]
-    search_fields = []
 
 
 class MasterDataView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
@@ -86,7 +81,6 @@ class MaterialOutwardView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixin
     queryset = MaterialOutward.objects.all()
     serializer_class = MaterialOutwardSerializer
     filter_backends = [MaterialOutwardFilter, SearchFilter]
-    search_fields = []
 
 
 class MaterialInwardView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
@@ -95,7 +89,6 @@ class MaterialInwardView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins
     queryset = MaterialInward.objects.all()
     serializer_class = MaterialInwardSerializer
     filter_backends = [MaterialInwardFilter, SearchFilter]
-    search_fields = []
 
 
 class GuestsInView(viewsets.GenericViewSet,  mixins.ListModelMixin):
