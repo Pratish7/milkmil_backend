@@ -4,7 +4,7 @@
       "pk": 1,
       "fields": {
         "key": "Keys",
-        "values": ["SPINNING", "CARDING", "AUTOCONER", "NEW GODOWN", "CANTEEN", "COMBER", "FM ROOM", "OFFICE", "SIMPLEX", "STORE ROOM"]
+        "values": ["SMALL GATE KEY", "MAIN GATE KEY", "GIRLS HOSTEL GATE KEY", "SIMPLEX KEY", "STORES KEY", "COMBER KEY", "CARDING KEY", "SPINNING KEY", "AUTO CONER", "CANTEEN KEY"]
       }
     }
   ]

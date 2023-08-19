@@ -40,16 +40,16 @@ class Vehicle(models.Model):
 class Keys(models.Model):
 
     key_types = (
-        ('SPINNING' , 'SPINNING'),
-        ('CARDING', 'CARDING'),
-        ('AUTOCONER', 'AUTOCONER'),
-        ('NEW GODOWN', 'NEW GODOWN'),
-        ('CANTEEN', 'CANTEEN'),
-        ('COMBER', 'COMBER'),
-        ('FM ROOM', 'FM ROOM'),
-        ('OFFICE', 'OFFICE'),
-        ('SIMPLEX', 'SIMPLEX'),
-        ('STORE ROOM', 'STORE ROOM'),
+        ('SMALL GATE KEY' , 'SMALL GATE KEY'),
+        ('MAIN GATE KEY' , 'MAIN GATE KEY'),
+        ('GIRLS HOSTEL GATE KEY' , 'GIRLS HOSTEL GATE KEY'),
+        ('SIMPLEX KEY' , 'SIMPLEX KEY '),
+        ('STORES KEY' , 'STORES KEY'),
+        ('COMBER KEY' , 'COMBER KEY'),
+        ('CARDING KEY' , 'CARDING KEY'),
+        ('SPINNING KEY' , 'SPINNING KEY'),
+        ('AUTO CONER' , 'AUTO CONER'),
+        ('CANTEEN KEY' , 'CANTEEN KEY'),
     )
 
     id = models.AutoField(primary_key=True)
