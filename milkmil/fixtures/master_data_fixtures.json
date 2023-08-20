@@ -14,5 +14,13 @@
         "key": "RelationShips",
         "values": ["Mother", "Father", "Brother", "Sister", "Agent"]
       }
+    },
+    {
+      "model": "milkmil.MasterData",
+      "pk": 3,
+      "fields": {
+        "key": "EmployeeTypes",
+        "values": ["MANAGING DIRECTOR", "FACTORY MANAGER", "QUALITY MANAGER", "TECHNICAL HEAD", "PRODUCTION MANAGER", "ELECTRICAL ENGINEER", "STORE KEEPER", "HR MANAGER", "VECHICLE INCHARGE", "ERP MANAGER", "CANTEEN INCHARGE", "DESPATCH INCHARGE"]
+      }
     }
   ]
