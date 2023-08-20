@@ -448,7 +448,7 @@ class BarCodeView(viewsets.GenericViewSet, mixins.CreateModelMixin):
 
 class CreateKeyView(viewsets.GenericViewSet, mixins.CreateModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated, CanWriteMasterData)
     queryset = KeysMaster.objects.all()
     serializer_class = KeyMasterSerializer
 
