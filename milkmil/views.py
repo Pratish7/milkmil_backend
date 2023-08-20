@@ -466,3 +466,14 @@ class CreateKeyView(viewsets.GenericViewSet, mixins.CreateModelMixin):
         upload_key_file_to_gcp(buffer.getvalue(), barcode_value)
         url = generate_key_download_link(barcode_value)
         return Response({'url': url}, status=status.HTTP_201_CREATED)
+    
+
+class GuestsSuggestionsView(viewsets.GenericViewSet, mixins.ListModelMixin):
+    authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
+    permission_classes = ()
+    queryset = Guests.objects.all()
+    serializer_class = GuestsSerializer
+
+    def list(self, request):
+        guests = Guests.objects.values_list('visitor_name', flat=True).distinct()
+        return Response({'guests': guests})
