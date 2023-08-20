@@ -66,9 +66,9 @@ class ReturnableMaterialsView(viewsets.GenericViewSet,  mixins.ListModelMixin, m
     filter_backends = [ReturnableMaterialsFilter, SearchFilter]
 
 
-class MasterDataView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
+class MasterDataView(viewsets.GenericViewSet,  mixins.ListModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = (IsAuthenticated, CanWriteMasterData)
+    permission_classes = ()
     queryset = MasterData.objects.all()
     serializer_class = MasterDataSerializer
     filter_backends = [MasterDataFilter, SearchFilter]

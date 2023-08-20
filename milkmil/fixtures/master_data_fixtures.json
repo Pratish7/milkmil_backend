@@ -6,5 +6,13 @@
         "key": "Keys",
         "values": ["SMALL GATE KEY", "MAIN GATE KEY", "GIRLS HOSTEL GATE KEY", "SIMPLEX KEY", "STORES KEY", "COMBER KEY", "CARDING KEY", "SPINNING KEY", "AUTO CONER", "CANTEEN KEY"]
       }
+    },
+    {
+      "model": "milkmil.MasterData",
+      "pk": 2,
+      "fields": {
+        "key": "RelationShips",
+        "values": ["Mother", "Father", "Brother", "Sister", "Agent"]
+      }
     }
   ]
