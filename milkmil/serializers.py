@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from milk_mil_backend.users.models import UserTypes
-from milkmil.models import BarCode, Guests, Milk, Vehicle, Keys, ReturnableMaterials, MasterData, MaterialOutward, MaterialInward
+from milkmil.models import BarCode, Guests, KeysMaster, Milk, Vehicle, Keys, ReturnableMaterials, MasterData, MaterialOutward, MaterialInward
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -104,5 +104,13 @@ class BarCodeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BarCode
+        fields = '__all__'
+        read_only_fields = ['id']
+
+
+class KeyMasterSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = KeysMaster
         fields = '__all__'
         read_only_fields = ['id']

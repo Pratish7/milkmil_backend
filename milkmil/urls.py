@@ -84,6 +84,9 @@ login_user_router.register('login', views.LoginUserView, basename='login')
 invoice_bar_router = routers.SimpleRouter()
 invoice_bar_router.register('barcode', views.BarCodeView, basename='barcode')
 
+create_master_key = routers.SimpleRouter()
+create_master_key.register('key-create', views.CreateKeyView, basename='key-create')
+
 app_name = 'milkmil'
 
 urlpatterns = [
@@ -114,4 +117,5 @@ urlpatterns = [
     path('', include(register_user_router.urls)),
     path('', include(login_user_router.urls)),
     path('', include(invoice_bar_router.urls)),
+    path('', include(create_master_key.urls)),
 ]

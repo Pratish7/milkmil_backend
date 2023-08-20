@@ -2,22 +2,21 @@ from rest_framework import viewsets, mixins
 from milk_mil_backend.users.models import UserTypes
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAuthenticated
-from milkmil.models import BarCode, Guests, Milk, Vehicle, Keys, ReturnableMaterials, MasterData, MaterialOutward, MaterialInward
+from milkmil.models import BarCode, Guests, KeysMaster, Milk, Vehicle, Keys, ReturnableMaterials, MasterData, MaterialOutward, MaterialInward
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from milkmil.permissions import CanViewReport, CanWriteGuest, CanWriteKeys, CanWriteMasterData, CanWriteMaterialInward, CanWriteMaterialOutward, CanWriteMilk, CanWriteReturnableMaterials, CanWriteVehicle
-from milkmil.serializers import BarCodeSerializer, GuestsSerializer, MilkSerializer, VehicleSerializer, KeysSerializer, ReturnableMaterialsSerializer, MasterDataSerializer, MaterialOutwardSerializer, MaterialInwardSerializer, UserTypesSerializer, RegisterUserSerializer, LoginUserSerializer
+from milkmil.serializers import BarCodeSerializer, GuestsSerializer, KeyMasterSerializer, MilkSerializer, VehicleSerializer, KeysSerializer, ReturnableMaterialsSerializer, MasterDataSerializer, MaterialOutwardSerializer, MaterialInwardSerializer, UserTypesSerializer, RegisterUserSerializer, LoginUserSerializer
 from rest_framework.filters import SearchFilter
 from milkmil.filters import GuestsFilter, MilkFilter, VehicleFilter, KeyFilter, ReturnableMaterialsFilter, MasterDataFilter, MaterialOutwardFilter, MaterialInwardFilter, GuestsInFilter, MaterialInwardQueueFilter, MaterialOutwardQueueFilter, ReturnableMaterialsQueueFilter
 from rest_framework import status
 from rest_framework.response import Response
 from django.utils import timezone
 import pandas as pd
-from milkmil.utils import upload_file_to_gcp, generate_download_link
+from milkmil.utils import upload_file_to_gcp, generate_download_link, upload_key_file_to_gcp, generate_key_download_link
 import io
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
-from barcode import generate
 from barcode.writer import ImageWriter
 from io import BytesIO
 import base64
@@ -447,3 +446,23 @@ class BarCodeView(viewsets.GenericViewSet, mixins.CreateModelMixin):
         return Response({'barcode': base64_image, 'value': barcode_value})
 
 
+class CreateKeyView(viewsets.GenericViewSet, mixins.CreateModelMixin):
+    authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
+    permission_classes = ()
+    queryset = KeysMaster.objects.all()
+    serializer_class = KeyMasterSerializer
+
+    def create(self, request, *args, **kwargs):
+        barcode_value = request.data.get('key_type')
+
+        if KeysMaster.objects.filter(key_type=barcode_value):
+            return Response({'message': 'Key already exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+        barcode_image = barcode.get('code128', barcode_value, writer=ImageWriter())
+        buffer = BytesIO()
+        barcode_image.write(buffer)
+        base64_image = base64.b64encode(buffer.getvalue()).decode('utf-8')
+        KeysMaster.objects.create(key_type=barcode_value, bar_code=base64_image, quantity=request.data.get('quantity')).save()
+        upload_key_file_to_gcp(buffer.getvalue(), barcode_value)
+        url = generate_key_download_link(barcode_value)
+        return Response({'url': url}, status=status.HTTP_201_CREATED)

@@ -60,6 +60,14 @@ class Keys(models.Model):
     returned_time = models.TimeField(null=True, blank=True)
 
 
+class KeysMaster(models.Model):
+
+    id = models.AutoField(primary_key=True)
+    key_type = models.CharField(choices=Keys.key_types)
+    quantity = models.IntegerField()
+    bar_code = models.TextField(null=True, blank=True)
+
+
 class ReturnableMaterials(models.Model):
 
     status_choices = (
