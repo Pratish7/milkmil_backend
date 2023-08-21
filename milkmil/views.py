@@ -76,7 +76,7 @@ class MasterDataView(viewsets.GenericViewSet,  mixins.ListModelMixin):
 
 class MasterDataUpdateView(viewsets.GenericViewSet,  mixins.UpdateModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated, CanWriteMasterData)
     queryset = MasterData.objects.all()
     serializer_class = MasterDataSerializer
 
