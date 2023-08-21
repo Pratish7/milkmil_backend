@@ -145,7 +145,7 @@ class MilkReportView(viewsets.GenericViewSet,  mixins.ListModelMixin):
 
 class GuestsReportView(viewsets.GenericViewSet,  mixins.ListModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated, CanViewReport)
     queryset = Guests.objects.all()
 
     def list(self, request, *args, **kwargs):
@@ -159,6 +159,10 @@ class GuestsReportView(viewsets.GenericViewSet,  mixins.ListModelMixin):
             return Response({'message': 'No data found'}, status=status.HTTP_404_NOT_FOUND)
         df = pd.DataFrame.from_records(queryset.values())
         df = df.drop(columns=['id', 'image'])
+        df['in_date'] = pd.to_datetime(df['in_date']).dt.strftime("%d-%m-%Y")
+        df['out_date'] = pd.to_datetime(df['out_date']).dt.strftime("%d-%m-%Y")
+        df['in_time'] = pd.to_datetime(df['in_time'], format='%H:%M:%S.%f').dt.strftime('%H:%M:%S')
+        df['out_time'] = pd.to_datetime(df['out_time'], format='%H:%M:%S.%f').dt.strftime('%H:%M:%S')
         excel_buffer = io.BytesIO()
         df.to_excel(excel_buffer, index=False)
         excel_buffer.seek(0)
@@ -183,6 +187,9 @@ class VehicleReportView(viewsets.GenericViewSet,  mixins.ListModelMixin):
         if not queryset:
             return Response({'message': 'No data found'}, status=status.HTTP_404_NOT_FOUND)
         df = pd.DataFrame.from_records(queryset.values())
+        df['date'] = pd.to_datetime(df['date']).dt.strftime("%d-%m-%Y")
+        df['in_time'] = pd.to_datetime(df['in_time'], format='%H:%M:%S.%f').dt.strftime('%H:%M:%S')
+        df['out_time'] = pd.to_datetime(df['out_time'], format='%H:%M:%S.%f').dt.strftime('%H:%M:%S')
         excel_buffer = io.BytesIO()
         df.to_excel(excel_buffer, index=False)
         excel_buffer.seek(0)
@@ -207,6 +214,8 @@ class MaterialOutwardReportView(viewsets.GenericViewSet,  mixins.ListModelMixin)
         if not queryset:
             return Response({'message': 'No data found'}, status=status.HTTP_404_NOT_FOUND)
         df = pd.DataFrame.from_records(queryset.values())
+        df['date'] = pd.to_datetime(df['date']).dt.strftime("%d-%m-%Y")
+        df['time'] = pd.to_datetime(df['time'], format='%H:%M:%S.%f').dt.strftime('%H:%M:%S')
         df = df.drop(columns=['id'])
         excel_buffer = io.BytesIO()
         df.to_excel(excel_buffer, index=False)
@@ -232,6 +241,9 @@ class MaterialInwardReportView(viewsets.GenericViewSet,  mixins.ListModelMixin):
         if not queryset:
             return Response({'message': 'No data found'}, status=status.HTTP_404_NOT_FOUND)
         df = pd.DataFrame.from_records(queryset.values())
+        df['date'] = pd.to_datetime(df['date']).dt.strftime("%d-%m-%Y")
+        df['in_time'] = pd.to_datetime(df['in_time'], format='%H:%M:%S.%f').dt.strftime('%H:%M:%S')
+        df['out_time'] = pd.to_datetime(df['out_time'], format='%H:%M:%S.%f').dt.strftime('%H:%M:%S')
         df = df.drop(columns=['id', 'image'])
         excel_buffer = io.BytesIO()
         df.to_excel(excel_buffer, index=False)
@@ -257,6 +269,10 @@ class ReturnableMaterialsReportView(viewsets.GenericViewSet,  mixins.ListModelMi
         if not queryset:
             return Response({'message': 'No data found'}, status=status.HTTP_404_NOT_FOUND)
         df = pd.DataFrame.from_records(queryset.values())
+        df['in_date'] = pd.to_datetime(df['in_date']).dt.strftime("%d-%m-%Y")
+        df['out_date'] = pd.to_datetime(df['out_date']).dt.strftime("%d-%m-%Y")
+        df['in_time'] = pd.to_datetime(df['in_time'], format='%H:%M:%S.%f').dt.strftime('%H:%M:%S')
+        df['out_time'] = pd.to_datetime(df['out_time'], format='%H:%M:%S.%f').dt.strftime('%H:%M:%S')
         df = df.drop(columns=['id'])
         excel_buffer = io.BytesIO()
         df.to_excel(excel_buffer, index=False)
@@ -283,6 +299,9 @@ class KeyReportView(viewsets.GenericViewSet,  mixins.ListModelMixin):
             return Response({'message': 'No data found'}, status=status.HTTP_404_NOT_FOUND)
         df = pd.DataFrame.from_records(queryset.values())
         df = df.drop(columns=['id'])
+        df['date'] = pd.to_datetime(df['date']).dt.strftime("%d-%m-%Y")
+        df['time_taken'] = pd.to_datetime(df['time_taken'], format='%H:%M:%S.%f').dt.strftime('%H:%M:%S')
+        df['returned_time'] = pd.to_datetime(df['returned_time'], format='%H:%M:%S.%f').dt.strftime('%H:%M:%S')
         excel_buffer = io.BytesIO()
         df.to_excel(excel_buffer, index=False)
         excel_buffer.seek(0)
