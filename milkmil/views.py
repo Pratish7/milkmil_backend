@@ -74,6 +74,26 @@ class MasterDataView(viewsets.GenericViewSet,  mixins.ListModelMixin):
     search_fields = []
 
 
+class MasterDataUpdateView(viewsets.GenericViewSet,  mixins.UpdateModelMixin):
+    authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
+    permission_classes = ()
+    queryset = MasterData.objects.all()
+    serializer_class = MasterDataSerializer
+
+    def update(self, request, *args, **kwargs):
+
+        pk = kwargs.get('pk')
+        obj = MasterData.objects.get(key=pk)
+        if not obj:
+            return Response({'message': 'Invalid key'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if request.data['name'] not in obj.values:
+            obj.values.append(request.data['name'])
+            obj.save()
+
+        return Response({'message': 'success'})
+
+
 class MaterialOutwardView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
     permission_classes = (IsAuthenticated, CanWriteMaterialOutward)

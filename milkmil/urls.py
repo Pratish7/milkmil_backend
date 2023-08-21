@@ -48,6 +48,9 @@ returnable_materials_report_router.register('returnablematerials-report', views.
 master_data_router = routers.SimpleRouter()
 master_data_router.register('masterdata', views.MasterDataView, basename='masterdata')
 
+master_data_update_router = routers.SimpleRouter()
+master_data_update_router.register('masterdata-update', views.MasterDataUpdateView, basename='masterdata-update')
+
 material_inward_router = routers.SimpleRouter()
 material_inward_router.register('materialinward', views.MaterialInwardView, basename='materialinward')
 
@@ -122,4 +125,5 @@ urlpatterns = [
     path('', include(invoice_bar_router.urls)),
     path('', include(create_master_key.urls)),
     path('', include(guests_suggestions.urls)),
+    path('', include(master_data_update_router.urls)),
 ]
