@@ -158,7 +158,7 @@ class GuestsReportView(viewsets.GenericViewSet,  mixins.ListModelMixin):
         if not queryset:
             return Response({'message': 'No data found'}, status=status.HTTP_404_NOT_FOUND)
         df = pd.DataFrame.from_records(queryset.values())
-        df = df.drop(columns=['id'])
+        df = df.drop(columns=['id', 'image'])
         excel_buffer = io.BytesIO()
         df.to_excel(excel_buffer, index=False)
         excel_buffer.seek(0)
@@ -232,7 +232,7 @@ class MaterialInwardReportView(viewsets.GenericViewSet,  mixins.ListModelMixin):
         if not queryset:
             return Response({'message': 'No data found'}, status=status.HTTP_404_NOT_FOUND)
         df = pd.DataFrame.from_records(queryset.values())
-        df = df.drop(columns=['id'])
+        df = df.drop(columns=['id', 'image'])
         excel_buffer = io.BytesIO()
         df.to_excel(excel_buffer, index=False)
         excel_buffer.seek(0)
