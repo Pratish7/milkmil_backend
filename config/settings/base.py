@@ -15,6 +15,26 @@ if READ_DOT_ENV_FILE:
     # OS environment variables take precedence over variables from .env
     env.read_env(str(BASE_DIR / ".env"))
 
+project_id = 'integral-sol-395609'
+
+def get_secret(secret_id):
+    # try:
+    #     client = secretmanager.SecretManagerServiceClient()
+    #     secret_name = f"projects/{project_id}/secrets/{secret_id}/versions/latest"
+    #     response = client.access_secret_version(name=secret_name)
+    #     secret_payload = response.payload.data.decode("UTF-8")
+    #     return secret_payload
+    # except Exception:
+        return ''
+
+BUCKET = get_secret('bucket')
+if not BUCKET:
+    BUCKET = 'milkmil'
+DB_URL = get_secret('db_url')
+if not DB_URL:
+    DB_URL = 'postgresql://postgres:root@localhost:5432/'
+    DB_URL = 'postgres://postgres:0.AH]AeB2[C+V*[A@127.0.0.1/'
+
 # GENERAL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
@@ -23,7 +43,7 @@ DEBUG = env.bool("DJANGO_DEBUG", False)
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # though not all of them may be available with every OS.
 # In Windows, this must be set to your system time zone.
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Kolkata"
 # https://docs.djangoproject.com/en/dev/ref/settings/#language-code
 LANGUAGE_CODE = "en-us"
 # https://docs.djangoproject.com/en/dev/ref/settings/#languages
@@ -48,9 +68,10 @@ LOCALE_PATHS = [str(BASE_DIR / "locale")]
 DATABASES = {
     "default": env.db(
         "DATABASE_URL",
-        default="postgresql://postgres:root@localhost:5432/milkmil",
+        default=DB_URL + 'milkmil',
     ),
 }
+
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
