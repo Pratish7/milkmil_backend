@@ -145,7 +145,7 @@ class MilkReportView(viewsets.GenericViewSet,  mixins.ListModelMixin):
 
 class GuestsReportView(viewsets.GenericViewSet,  mixins.ListModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = (IsAuthenticated, CanViewReport)
+    permission_classes = ()
     queryset = Guests.objects.all()
 
     def list(self, request, *args, **kwargs):

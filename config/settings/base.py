@@ -29,7 +29,7 @@ def get_secret(secret_id):
 
 BUCKET = get_secret('bucket')
 if not BUCKET:
-    BUCKET = 'milkmil'
+    BUCKET = 'pratish'
 DB_URL = get_secret('db_url')
 if not DB_URL:
     DB_URL = 'postgresql://postgres:root@localhost:5432/'
