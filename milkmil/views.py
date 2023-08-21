@@ -27,7 +27,7 @@ from datetime import date
 
 class GuestsView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = (IsAuthenticated, CanWriteGuest)
+    permission_classes = ()
     queryset = Guests.objects.all()
     serializer_class = GuestsSerializer
     filter_backends = [GuestsFilter, SearchFilter]
