@@ -22,17 +22,17 @@ def generate_download_link(file_name):
     return url
 
 
-def upload_key_file_to_gcp(img_content, file_name):
+def upload_key_file_to_gcp(img_content, file_name, file_loc):
     client = storage.Client()
     bucket = client.get_bucket(settings.BUCKET)
-    blob = bucket.blob('key_bar_codes/{}'.format(file_name + '.jpg'))
+    blob = bucket.blob('{}/{}'.format(file_loc, file_name + '.jpg'))
     blob.upload_from_string(img_content, content_type="image/jpeg")
 
 
-def generate_key_download_link(file_name):
+def generate_key_download_link(file_name, file_loc):
     client = storage.Client()
     bucket = client.bucket(settings.BUCKET)
-    blob = bucket.blob('key_bar_codes/{}'.format(file_name + '.jpg'))
+    blob = bucket.blob('{}/{}'.format(file_loc, file_name + '.jpg'))
 
     url = blob.generate_signed_url(
         version='v4',

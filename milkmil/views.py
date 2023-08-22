@@ -467,9 +467,11 @@ class BarCodeView(viewsets.GenericViewSet, mixins.CreateModelMixin):
         barcode_image = barcode.get('ean13', barcode_value, writer=ImageWriter())
         buffer = BytesIO()
         barcode_image.write(buffer)
-        base64_image = base64.b64encode(buffer.getvalue()).decode('utf-8')
-        BarCode.objects.create(invoice_num=barcode_value, barcode=base64_image).save()
-        return Response({'barcode': base64_image, 'value': barcode_value})
+        # base64_image = base64.b64encode(buffer.getvalue()).decode('utf-8')
+        # BarCode.objects.create(invoice_num=barcode_value, barcode=base64_image).save()
+        upload_key_file_to_gcp(buffer.getvalue(), barcode_value, 'invoice_bar_code')
+        url = generate_key_download_link(barcode_value, 'invoice_bar_code')
+        return Response({'url': url, 'value': barcode_value}, status=status.HTTP_201_CREATED)
 
 
 class CreateKeyView(viewsets.GenericViewSet, mixins.CreateModelMixin):
@@ -487,10 +489,10 @@ class CreateKeyView(viewsets.GenericViewSet, mixins.CreateModelMixin):
         barcode_image = barcode.get('code128', barcode_value, writer=ImageWriter())
         buffer = BytesIO()
         barcode_image.write(buffer)
-        base64_image = base64.b64encode(buffer.getvalue()).decode('utf-8')
-        KeysMaster.objects.create(key_type=barcode_value, bar_code=base64_image, quantity=request.data.get('quantity')).save()
-        upload_key_file_to_gcp(buffer.getvalue(), barcode_value)
-        url = generate_key_download_link(barcode_value)
+        # base64_image = base64.b64encode(buffer.getvalue()).decode('utf-8')
+        # KeysMaster.objects.create(key_type=barcode_value, bar_code=base64_image, quantity=request.data.get('quantity')).save()
+        upload_key_file_to_gcp(buffer.getvalue(), barcode_value, 'key_bar_code')
+        url = generate_key_download_link(barcode_value, 'key_bar_code')
         return Response({'url': url}, status=status.HTTP_201_CREATED)
     
 
