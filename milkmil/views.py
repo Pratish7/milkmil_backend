@@ -2,11 +2,11 @@ from rest_framework import viewsets, mixins
 from milk_mil_backend.users.models import UserTypes
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAuthenticated
-from milkmil.models import BarCode, Guests, KeysMaster, Milk, Vehicle, Keys, ReturnableMaterials, MasterData, MaterialOutward, MaterialInward
+from milkmil.models import BarCode, Employees, Guests, KeysMaster, Milk, Vehicle, Keys, ReturnableMaterials, MasterData, MaterialOutward, MaterialInward
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from milkmil.permissions import CanViewReport, CanWriteGuest, CanWriteKeys, CanWriteMasterData, CanWriteMaterialInward, CanWriteMaterialOutward, CanWriteMilk, CanWriteReturnableMaterials, CanWriteVehicle
-from milkmil.serializers import BarCodeSerializer, GuestsSerializer, KeyMasterSerializer, MilkSerializer, VehicleSerializer, KeysSerializer, ReturnableMaterialsSerializer, MasterDataSerializer, MaterialOutwardSerializer, MaterialInwardSerializer, UserTypesSerializer, RegisterUserSerializer, LoginUserSerializer
+from milkmil.serializers import BarCodeSerializer, EmployeeSerializer, GuestsSerializer, KeyMasterSerializer, MilkSerializer, VehicleSerializer, KeysSerializer, ReturnableMaterialsSerializer, MasterDataSerializer, MaterialOutwardSerializer, MaterialInwardSerializer, UserTypesSerializer, RegisterUserSerializer, LoginUserSerializer
 from rest_framework.filters import SearchFilter
 from milkmil.filters import GuestsFilter, MilkFilter, VehicleFilter, KeyFilter, ReturnableMaterialsFilter, MasterDataFilter, MaterialOutwardFilter, MaterialInwardFilter, GuestsInFilter, MaterialInwardQueueFilter, MaterialOutwardQueueFilter, ReturnableMaterialsQueueFilter
 from rest_framework import status
@@ -516,3 +516,18 @@ class GuestsSuggestionsView(viewsets.GenericViewSet, mixins.ListModelMixin):
     def list(self, request):
         guests = Guests.objects.values_list('visitor_name', flat=True).distinct()
         return Response({'guests': guests})
+
+
+class EmployeeCreateView(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.UpdateModelMixin):
+    authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
+    permission_classes = (IsAuthenticated, CanWriteMasterData)
+    queryset = Employees.objects.all()
+    serializer_class = EmployeeSerializer
+
+
+class EmployeeView(viewsets.GenericViewSet, mixins.ListModelMixin):
+    authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
+    permission_classes = ()
+    queryset = Employees.objects.all()
+    serializer_class = EmployeeSerializer
+    filter_backends = [SearchFilter]

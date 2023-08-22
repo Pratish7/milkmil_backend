@@ -119,3 +119,11 @@ class BarCode(models.Model):
     id = models.AutoField(primary_key=True)
     barcode = models.TextField()
     invoice_num = models.CharField()
+
+
+class Employees(models.Model):
+
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255)
+    role = models.CharField(max_length=255)
+    phone = models.CharField(max_length=255)

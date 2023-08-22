@@ -93,6 +93,12 @@ create_master_key.register('key-create', views.CreateKeyView, basename='key-crea
 guests_suggestions = routers.SimpleRouter()
 guests_suggestions.register('guests-suggestions', views.GuestsSuggestionsView, basename='guests-suggestions')
 
+employee_create = routers.SimpleRouter()
+employee_create.register('employee', views.EmployeeCreateView, basename='employee')
+
+employee_view = routers.SimpleRouter()
+employee_view.register('employee-view', views.EmployeeView, basename='employee-view')
+
 app_name = 'milkmil'
 
 urlpatterns = [
@@ -126,4 +132,6 @@ urlpatterns = [
     path('', include(create_master_key.urls)),
     path('', include(guests_suggestions.urls)),
     path('', include(master_data_update_router.urls)),
+    path('', include(employee_create.urls)),
+    path('', include(employee_view.urls)),
 ]
