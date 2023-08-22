@@ -1,6 +1,15 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
+import datetime
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
+class TimeFieldWithoutMicroseconds(models.TimeField):
+    def get_db_prep_value(self, value, connection, prepared=False):
+        if isinstance(value, datetime.time):
+            return value.replace(microsecond=0)
+        return super().get_db_prep_value(value, connection, prepared)
+    
 
 class Guests(models.Model):
 
@@ -15,6 +24,10 @@ class Guests(models.Model):
     out_time = models.TimeField(null=True, default=None)
     image = models.TextField(null=True, blank=True)
 
+@receiver(post_save, sender=Guests)
+def remove_microseconds(sender, instance, **kwargs):
+    instance.in_time = instance.in_time.replace(microsecond=0)
+
 
 class Milk(models.Model):
 
@@ -22,6 +35,10 @@ class Milk(models.Model):
     quantity = models.IntegerField()
     date = models.DateField(auto_now_add=True)
     time = models.TimeField(auto_now_add=True)
+
+@receiver(post_save, sender=Milk)
+def remove_microseconds(sender, instance, **kwargs):
+    instance.time = instance.time.replace(microsecond=0)
 
 
 class Vehicle(models.Model):
@@ -36,6 +53,11 @@ class Vehicle(models.Model):
     out_time = models.DateTimeField(null=True, blank=True)
     out_kms = models.FloatField(null=True, blank=True)
 
+@receiver(post_save, sender=Vehicle)
+def remove_microseconds(sender, instance, **kwargs):
+    instance.in_time = instance.in_time.replace(microsecond=0)
+    instance.out_time = instance.out_time.replace(microsecond=0)
+
 
 class Keys(models.Model):
 
@@ -45,6 +67,11 @@ class Keys(models.Model):
     key_type = models.CharField()
     taken_time = models.TimeField(auto_now_add=True)
     returned_time = models.TimeField(null=True, blank=True)
+
+@receiver(post_save, sender=Keys)
+def remove_microseconds(sender, instance, **kwargs):
+    instance.taken_time = instance.taken_time.replace(microsecond=0)
+    instance.returned_time = instance.returned_time.replace(microsecond=0)
 
 
 class KeysMaster(models.Model):
@@ -70,6 +97,11 @@ class ReturnableMaterials(models.Model):
     in_time = models.TimeField(blank=True, null=True)
     status = models.CharField(choices=status_choices, default='YET TO BE RETURNED')
 
+@receiver(post_save, sender=ReturnableMaterials)
+def remove_microseconds(sender, instance, **kwargs):
+    instance.out_time = instance.out_time.replace(microsecond=0)
+    instance.in_time = instance.in_time.replace(microsecond=0)
+
 
 class MaterialOutward(models.Model):
 
@@ -84,6 +116,10 @@ class MaterialOutward(models.Model):
     invoice_num = models.CharField()
     status = models.CharField(choices=status_choices, default='QUEUE')
 
+@receiver(post_save, sender=MaterialOutward)
+def remove_microseconds(sender, instance, **kwargs):
+    instance.time = instance.time.replace(microsecond=0)
+
 
 class MaterialInward(models.Model):
 
@@ -93,6 +129,11 @@ class MaterialInward(models.Model):
     invoice_num = models.CharField(max_length=255)
     in_time = models.TimeField(auto_now_add=True)
     out_time = models.TimeField(blank=True, null=True)
+
+@receiver(post_save, sender=MaterialInward)
+def remove_microseconds(sender, instance, **kwargs):
+    instance.in_time = instance.in_time.replace(microsecond=0)
+    instance.out_time = instance.out_time.replace(microsecond=0)
 
 
 class MasterData(models.Model):
