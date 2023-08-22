@@ -22,6 +22,7 @@ from io import BytesIO
 import base64
 import barcode
 from datetime import date
+import pytz
 
 
 
@@ -131,8 +132,8 @@ class GuestsOutUpdateView(viewsets.GenericViewSet,  mixins.UpdateModelMixin):
             return Response({'status': 'status is required'}, status=status.HTTP_400_BAD_REQUEST)
 
         instance = self.get_object()
-        instance.out_date = timezone.now().date()
-        instance.out_time = timezone.now().time()
+        instance.out_date = request.ist_now.date()
+        instance.out_time = request.ist_now.time()
         instance.save()
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
@@ -351,7 +352,7 @@ class MaterialInwardUpdateView(viewsets.GenericViewSet,  mixins.UpdateModelMixin
             return Response({'status': 'status is required'}, status=status.HTTP_400_BAD_REQUEST)
 
         instance = self.get_object()
-        instance.out_time = timezone.now().time()
+        instance.out_time = request.ist_now.time()
         instance.save()
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
@@ -404,8 +405,8 @@ class ReturnableMaterialsUpdateView(viewsets.GenericViewSet,  mixins.UpdateModel
 
         instance = self.get_object()
         instance.status = 'RETURNED / COMPLETED'
-        instance.in_date = timezone.now().date()
-        instance.in_time = timezone.now().time()
+        instance.in_date = request.ist_now.date()
+        instance.in_time = request.ist_now.time()
         instance.save()
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
@@ -551,7 +552,7 @@ class UpdateKeyReturnedView(viewsets.GenericViewSet, mixins.UpdateModelMixin):
 
 class KeyReturnedUpdateView(viewsets.GenericViewSet,  mixins.UpdateModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated, CanWriteKeys)
     queryset = Keys.objects.all()
     serializer_class = KeysSerializer
     
@@ -559,9 +560,8 @@ class KeyReturnedUpdateView(viewsets.GenericViewSet,  mixins.UpdateModelMixin):
         
         if 'status' not in request.data or request.data.get('status') != 'returned':
             return Response({'status': 'status is required'}, status=status.HTTP_400_BAD_REQUEST)
-
         instance = self.get_object()
-        instance.returned_time = timezone.now().time()
+        instance.returned_time = request.ist_now.time()
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
     
