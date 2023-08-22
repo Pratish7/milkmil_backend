@@ -33,7 +33,7 @@ if not BUCKET:
 DB_URL = get_secret('db_url')
 if not DB_URL:
     DB_URL = 'postgresql://postgres:root@localhost:5432/'
-    # DB_URL = 'postgres://postgres:0.AH]AeB2[C+V*[A@127.0.0.1/'
+    DB_URL = 'postgres://postgres:0.AH]AeB2[C+V*[A@127.0.0.1/'
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -170,6 +170,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
+    'config.timezone_middleware.TimezoneMiddleware',
 ]
 
 # STATIC
