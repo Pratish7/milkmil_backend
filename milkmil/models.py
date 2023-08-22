@@ -1,8 +1,11 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 import datetime
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
+from django.utils import timezone
+import pytz
+
 
 class TimeFieldWithoutMicroseconds(models.TimeField):
     def get_db_prep_value(self, value, connection, prepared=False):
@@ -25,8 +28,10 @@ class Guests(models.Model):
     image = models.TextField(null=True, blank=True)
 
 @receiver(post_save, sender=Guests)
-def remove_microseconds(sender, instance, **kwargs):
-    instance.in_time = instance.in_time.replace(microsecond=0)
+def remove_microseconds_save(sender, instance, created, **kwargs):
+    if created:
+        instance.in_time = instance.in_time.replace(microsecond=0)
+        instance.save()
 
 
 class Milk(models.Model):
@@ -37,8 +42,10 @@ class Milk(models.Model):
     time = models.TimeField(auto_now_add=True)
 
 @receiver(post_save, sender=Milk)
-def remove_microseconds(sender, instance, **kwargs):
-    instance.time = instance.time.replace(microsecond=0)
+def remove_microseconds_save(sender, instance, created, **kwargs):
+    if created:
+        instance.time = instance.time.replace(microsecond=0)
+        instance.save()
 
 
 class Vehicle(models.Model):
@@ -54,9 +61,11 @@ class Vehicle(models.Model):
     out_kms = models.FloatField(null=True, blank=True)
 
 @receiver(post_save, sender=Vehicle)
-def remove_microseconds(sender, instance, **kwargs):
-    instance.in_time = instance.in_time.replace(microsecond=0)
-    instance.out_time = instance.out_time.replace(microsecond=0)
+def remove_microseconds_save(sender, instance, created, **kwargs):
+    if created:
+        instance.in_time = instance.in_time.replace(microsecond=0)
+        instance.out_time = instance.out_time.replace(microsecond=0)
+        instance.save()
 
 
 class Keys(models.Model):
@@ -69,9 +78,11 @@ class Keys(models.Model):
     returned_time = models.TimeField(null=True, blank=True)
 
 @receiver(post_save, sender=Keys)
-def remove_microseconds(sender, instance, **kwargs):
-    instance.taken_time = instance.taken_time.replace(microsecond=0)
-    instance.returned_time = instance.returned_time.replace(microsecond=0)
+def remove_microseconds_save(sender, instance, created, **kwargs):
+    if created:
+        instance.taken_time = instance.taken_time.replace(microsecond=0)
+        instance.returned_time = instance.returned_time.replace(microsecond=0)
+        instance.save()    
 
 
 class KeysMaster(models.Model):
@@ -98,9 +109,11 @@ class ReturnableMaterials(models.Model):
     status = models.CharField(choices=status_choices, default='YET TO BE RETURNED')
 
 @receiver(post_save, sender=ReturnableMaterials)
-def remove_microseconds(sender, instance, **kwargs):
-    instance.out_time = instance.out_time.replace(microsecond=0)
-    instance.in_time = instance.in_time.replace(microsecond=0)
+def remove_microseconds_save(sender, instance, created, **kwargs):
+    if created:
+        instance.out_time = instance.out_time.replace(microsecond=0)
+        instance.in_time = instance.in_time.replace(microsecond=0)
+        instance.save()
 
 
 class MaterialOutward(models.Model):
@@ -117,8 +130,10 @@ class MaterialOutward(models.Model):
     status = models.CharField(choices=status_choices, default='QUEUE')
 
 @receiver(post_save, sender=MaterialOutward)
-def remove_microseconds(sender, instance, **kwargs):
-    instance.time = instance.time.replace(microsecond=0)
+def remove_microseconds_save(sender, instance, created, **kwargs):
+    if created:
+        instance.time = instance.time.replace(microsecond=0)
+        instance.save()
 
 
 class MaterialInward(models.Model):
@@ -131,9 +146,11 @@ class MaterialInward(models.Model):
     out_time = models.TimeField(blank=True, null=True)
 
 @receiver(post_save, sender=MaterialInward)
-def remove_microseconds(sender, instance, **kwargs):
-    instance.in_time = instance.in_time.replace(microsecond=0)
-    instance.out_time = instance.out_time.replace(microsecond=0)
+def remove_microseconds_save(sender, instance, created, **kwargs):
+    if created:
+        instance.in_time = instance.in_time.replace(microsecond=0)
+        instance.out_time = instance.out_time.replace(microsecond=0)
+        instance.save()
 
 
 class MasterData(models.Model):
