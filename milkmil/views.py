@@ -11,7 +11,6 @@ from rest_framework.filters import SearchFilter
 from milkmil.filters import GuestsFilter, KeysQueue, MilkFilter, VehicleFilter, KeyFilter, ReturnableMaterialsFilter, MasterDataFilter, MaterialOutwardFilter, MaterialInwardFilter, GuestsInFilter, MaterialInwardQueueFilter, MaterialOutwardQueueFilter, ReturnableMaterialsQueueFilter
 from rest_framework import status
 from rest_framework.response import Response
-from django.utils import timezone
 import pandas as pd
 from milkmil.utils import upload_file_to_gcp, generate_download_link, upload_key_file_to_gcp, generate_key_download_link
 import io
@@ -22,8 +21,6 @@ from io import BytesIO
 import base64
 import barcode
 from datetime import date
-import pytz
-
 
 
 class GuestsView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
@@ -52,7 +49,7 @@ class VehicleView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.Create
 
 class KeyView(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.UpdateModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated, CanWriteKeys)
     queryset = Keys.objects.all()
     serializer_class = KeysSerializer
     filter_backends = [KeyFilter, SearchFilter]
