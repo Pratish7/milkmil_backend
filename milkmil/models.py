@@ -39,23 +39,10 @@ class Vehicle(models.Model):
 
 class Keys(models.Model):
 
-    key_types = (
-        ('SMALL GATE KEY' , 'SMALL GATE KEY'),
-        ('MAIN GATE KEY' , 'MAIN GATE KEY'),
-        ('GIRLS HOSTEL GATE KEY' , 'GIRLS HOSTEL GATE KEY'),
-        ('SIMPLEX KEY' , 'SIMPLEX KEY '),
-        ('STORES KEY' , 'STORES KEY'),
-        ('COMBER KEY' , 'COMBER KEY'),
-        ('CARDING KEY' , 'CARDING KEY'),
-        ('SPINNING KEY' , 'SPINNING KEY'),
-        ('AUTO CONER' , 'AUTO CONER'),
-        ('CANTEEN KEY' , 'CANTEEN KEY'),
-    )
-
     id = models.AutoField(primary_key=True)
     date = models.DateField(auto_now_add=True)
     person_name = models.CharField(max_length=255)
-    key_type = models.CharField(choices=key_types)
+    key_type = models.CharField()
     taken_time = models.TimeField(auto_now_add=True)
     returned_time = models.TimeField(null=True, blank=True)
 
@@ -63,7 +50,7 @@ class Keys(models.Model):
 class KeysMaster(models.Model):
 
     id = models.AutoField(primary_key=True)
-    key_type = models.CharField(choices=Keys.key_types)
+    key_type = models.CharField()
     quantity = models.IntegerField()
     bar_code = models.TextField(null=True, blank=True)
 

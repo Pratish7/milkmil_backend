@@ -91,6 +91,14 @@ class GuestsInFilter(filters.BaseFilterBackend):
                 elif request.query_params['type'] == 'relationship':
                     queryset = queryset.filter(organization__isnull=True)
         return queryset
+    
+
+class KeysQueue(filters.BaseFilterBackend):
+
+    def filter_queryset(self, request, queryset, view):
+
+        queryset = queryset.filter(returned_time__isnull=True)
+        return queryset
 
 
 class MaterialInwardQueueFilter(filters.BaseFilterBackend):

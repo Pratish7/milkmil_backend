@@ -8,7 +8,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from milkmil.permissions import CanViewReport, CanWriteGuest, CanWriteKeys, CanWriteMasterData, CanWriteMaterialInward, CanWriteMaterialOutward, CanWriteMilk, CanWriteReturnableMaterials, CanWriteVehicle
 from milkmil.serializers import BarCodeSerializer, EmployeeSerializer, GuestsSerializer, KeyMasterSerializer, MilkSerializer, VehicleSerializer, KeysSerializer, ReturnableMaterialsSerializer, MasterDataSerializer, MaterialOutwardSerializer, MaterialInwardSerializer, UserTypesSerializer, RegisterUserSerializer, LoginUserSerializer
 from rest_framework.filters import SearchFilter
-from milkmil.filters import GuestsFilter, MilkFilter, VehicleFilter, KeyFilter, ReturnableMaterialsFilter, MasterDataFilter, MaterialOutwardFilter, MaterialInwardFilter, GuestsInFilter, MaterialInwardQueueFilter, MaterialOutwardQueueFilter, ReturnableMaterialsQueueFilter
+from milkmil.filters import GuestsFilter, KeysQueue, MilkFilter, VehicleFilter, KeyFilter, ReturnableMaterialsFilter, MasterDataFilter, MaterialOutwardFilter, MaterialInwardFilter, GuestsInFilter, MaterialInwardQueueFilter, MaterialOutwardQueueFilter, ReturnableMaterialsQueueFilter
 from rest_framework import status
 from rest_framework.response import Response
 from django.utils import timezone
@@ -49,9 +49,9 @@ class VehicleView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.Create
     filter_backends = [VehicleFilter, SearchFilter]
 
 
-class KeyView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
+class KeyView(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.UpdateModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = (IsAuthenticated, CanWriteKeys)
+    permission_classes = ()
     queryset = Keys.objects.all()
     serializer_class = KeysSerializer
     filter_backends = [KeyFilter, SearchFilter]
@@ -527,7 +527,41 @@ class EmployeeCreateView(viewsets.GenericViewSet, mixins.CreateModelMixin, mixin
 
 class EmployeeView(viewsets.GenericViewSet, mixins.ListModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated, CanWriteKeys)
     queryset = Employees.objects.all()
     serializer_class = EmployeeSerializer
     filter_backends = [SearchFilter]
+
+
+class KeyQueueView(viewsets.GenericViewSet,  mixins.ListModelMixin):
+    authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
+    permission_classes = (IsAuthenticated, CanWriteKeys)
+    queryset = Keys.objects.all()
+    serializer_class = KeysSerializer
+    filter_backends = [KeysQueue, SearchFilter]
+
+
+class UpdateKeyReturnedView(viewsets.GenericViewSet, mixins.UpdateModelMixin):
+    authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
+    permission_classes = (IsAuthenticated, CanWriteKeys)
+    queryset = Keys.objects.all()
+    serializer_class = KeysSerializer
+    filter_backends = [KeysQueue, SearchFilter]
+
+
+class KeyReturnedUpdateView(viewsets.GenericViewSet,  mixins.UpdateModelMixin):
+    authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
+    permission_classes = ()
+    queryset = Keys.objects.all()
+    serializer_class = KeysSerializer
+    
+    def update(self, request, *args, **kwargs):
+        
+        if 'status' not in request.data or request.data.get('status') != 'returned':
+            return Response({'status': 'status is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        instance = self.get_object()
+        instance.returned_time = timezone.now().time()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+    

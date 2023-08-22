@@ -30,6 +30,9 @@ vehicle_report_router.register('vehicle-report', views.VehicleReportView, basena
 keys_router = routers.SimpleRouter()
 keys_router.register('keys', views.KeyView, basename='keys')
 
+keys_queue_router = routers.SimpleRouter()
+keys_queue_router.register('keys-queue', views.KeyQueueView, basename='keys-queue')
+
 keys_report_router = routers.SimpleRouter()
 keys_report_router.register('key-report', views.KeyReportView, basename='key-report')
 
@@ -99,6 +102,9 @@ employee_create.register('employee', views.EmployeeCreateView, basename='employe
 employee_view = routers.SimpleRouter()
 employee_view.register('employee-view', views.EmployeeView, basename='employee-view')
 
+update_keys_returned = routers.SimpleRouter()
+update_keys_returned.register('key-returned', views.KeyReturnedUpdateView, basename='key-returned')
+
 app_name = 'milkmil'
 
 urlpatterns = [
@@ -134,4 +140,6 @@ urlpatterns = [
     path('', include(master_data_update_router.urls)),
     path('', include(employee_create.urls)),
     path('', include(employee_view.urls)),
+    path('', include(keys_queue_router.urls)),
+    path('', include(update_keys_returned.urls)),
 ]
