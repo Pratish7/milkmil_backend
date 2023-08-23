@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from milkmil.models import BarCode, Employees, Guests, KeysMaster, Milk, Vehicle, Keys, ReturnableMaterials, MasterData, MaterialOutward, MaterialInward
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from milkmil.permissions import CanViewReport, CanWriteGuest, CanWriteKeys, CanWriteMasterData, CanWriteMaterialInward, CanWriteMaterialOutward, CanWriteMilk, CanWriteReturnableMaterials, CanWriteVehicle
+from milkmil.permissions import CanGenerateBarCode, CanViewReport, CanWriteGuest, CanWriteKeys, CanWriteMasterData, CanWriteMaterialInward, CanWriteMaterialOutward, CanWriteMilk, CanWriteReturnableMaterials, CanWriteVehicle
 from milkmil.serializers import BarCodeSerializer, EmployeeSerializer, GuestsSerializer, KeyMasterSerializer, MilkSerializer, VehicleSerializer, KeysSerializer, ReturnableMaterialsSerializer, MasterDataSerializer, MaterialOutwardSerializer, MaterialInwardSerializer, UserTypesSerializer, RegisterUserSerializer, LoginUserSerializer
 from rest_framework.filters import SearchFilter
 from milkmil.filters import GuestsFilter, KeysQueue, MilkFilter, VehicleFilter, KeyFilter, ReturnableMaterialsFilter, MasterDataFilter, MaterialOutwardFilter, MaterialInwardFilter, GuestsInFilter, MaterialInwardQueueFilter, MaterialOutwardQueueFilter, ReturnableMaterialsQueueFilter
@@ -456,7 +456,7 @@ class LoginUserView(viewsets.GenericViewSet, mixins.CreateModelMixin):
 
 class BarCodeView(viewsets.GenericViewSet, mixins.CreateModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = (IsAuthenticated, CanGenerateBrCode)
+    permission_classes = (IsAuthenticated, CanGenerateBarCode)
     queryset = BarCode.objects.all()
     serializer_class = BarCodeSerializer
 

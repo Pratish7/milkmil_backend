@@ -128,7 +128,7 @@ class CanViewReport(BasePermission):
         return False
 
 
-class CanViewReport(BasePermission):
+class CanGenerateBarCode(BasePermission):
 
     def has_permission(self, request, view):
         if request.user.is_superuser:
