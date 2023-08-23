@@ -64,7 +64,6 @@ class Vehicle(models.Model):
 def remove_microseconds_save(sender, instance, created, **kwargs):
     if created:
         instance.in_time = instance.in_time.replace(microsecond=0)
-        instance.out_time = instance.out_time.replace(microsecond=0)
         instance.save()
 
 
@@ -81,7 +80,6 @@ class Keys(models.Model):
 def remove_microseconds_save(sender, instance, created, **kwargs):
     if created:
         instance.taken_time = instance.taken_time.replace(microsecond=0)
-        instance.returned_time = instance.returned_time.replace(microsecond=0)
         instance.save()    
 
 
@@ -111,7 +109,6 @@ class ReturnableMaterials(models.Model):
 @receiver(post_save, sender=ReturnableMaterials)
 def remove_microseconds_save(sender, instance, created, **kwargs):
     if created:
-        instance.out_time = instance.out_time.replace(microsecond=0)
         instance.in_time = instance.in_time.replace(microsecond=0)
         instance.save()
 
@@ -149,7 +146,6 @@ class MaterialInward(models.Model):
 def remove_microseconds_save(sender, instance, created, **kwargs):
     if created:
         instance.in_time = instance.in_time.replace(microsecond=0)
-        instance.out_time = instance.out_time.replace(microsecond=0)
         instance.save()
 
 
