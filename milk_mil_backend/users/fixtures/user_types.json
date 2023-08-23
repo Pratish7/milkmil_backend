@@ -103,5 +103,12 @@
       "fields": {
         "user_type": "SAMSUNG PHONE - QR PHOTO DATA ENTRY"
       }
+    },
+    {
+      "model": "users.UserTypes",
+      "pk": 16,
+      "fields": {
+        "user_type": "GENERATE BILLING"
+      }
     }
   ]

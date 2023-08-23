@@ -126,3 +126,17 @@ class CanViewReport(BasePermission):
         if 13 in user_permissions or 1 in user_permissions or 10 in user_permissions:
             return True
         return False
+
+
+class CanViewReport(BasePermission):
+
+    def has_permission(self, request, view):
+        if request.user.is_superuser:
+            return True
+        user_permissions = []
+        perms = UserTypes.objects.filter(user=request.user)
+        for i in perms:
+            user_permissions.append(i.id)
+        if 16 in user_permissions or 1 in user_permissions or 10 in user_permissions:
+            return True
+        return False

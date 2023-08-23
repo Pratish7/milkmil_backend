@@ -456,7 +456,7 @@ class LoginUserView(viewsets.GenericViewSet, mixins.CreateModelMixin):
 
 class BarCodeView(viewsets.GenericViewSet, mixins.CreateModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, CanGenerateBrCode)
     queryset = BarCode.objects.all()
     serializer_class = BarCodeSerializer
 
