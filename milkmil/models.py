@@ -71,7 +71,7 @@ class Keys(models.Model):
 
     id = models.AutoField(primary_key=True)
     date = models.DateField(auto_now_add=True)
-    person_name = models.CharField(max_length=255)
+    person_image = models.TextField(null=True, blank=True)
     key_type = models.CharField()
     taken_time = models.TimeField(auto_now_add=True)
     returned_time = models.TimeField(null=True, blank=True)
