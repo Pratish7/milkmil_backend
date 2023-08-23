@@ -2,6 +2,7 @@
 Base settings to build other settings files upon.
 """
 from pathlib import Path
+# from google.cloud import secretmanager
 
 import environ
 
@@ -31,6 +32,7 @@ BUCKET = get_secret('bucket')
 if not BUCKET:
     BUCKET = 'pratish'
 DB_URL = get_secret('db_url')
+
 if not DB_URL:
     DB_URL = 'postgresql://postgres:root@localhost:5432/'
     # DB_URL = 'postgres://postgres:0.AH]AeB2[C+V*[A@127.0.0.1/'
