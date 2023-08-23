@@ -532,15 +532,7 @@ class EmployeeView(viewsets.GenericViewSet, mixins.ListModelMixin):
 
 class KeyQueueView(viewsets.GenericViewSet,  mixins.ListModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = (IsAuthenticated, CanWriteKeys)
-    queryset = Keys.objects.all()
-    serializer_class = KeysSerializer
-    filter_backends = [KeysQueue, SearchFilter]
-
-
-class UpdateKeyReturnedView(viewsets.GenericViewSet, mixins.UpdateModelMixin):
-    authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = (IsAuthenticated, CanWriteKeys)
+    permission_classes = ()
     queryset = Keys.objects.all()
     serializer_class = KeysSerializer
     filter_backends = [KeysQueue, SearchFilter]
@@ -559,5 +551,6 @@ class KeyReturnedUpdateView(viewsets.GenericViewSet,  mixins.UpdateModelMixin):
         instance = self.get_object()
         instance.returned_time = request.ist_now.time()
         serializer = self.get_serializer(instance)
+        instance.save()
         return Response(serializer.data)
     
