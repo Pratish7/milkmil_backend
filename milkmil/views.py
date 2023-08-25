@@ -1,4 +1,6 @@
+from typing import Any
 from rest_framework import viewsets, mixins
+from rest_framework.request import Request
 from milk_mil_backend.users.models import UserTypes
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAuthenticated
@@ -21,6 +23,7 @@ from io import BytesIO
 import base64
 import barcode
 from datetime import date
+from django.contrib.auth.hashers import make_password
 
 
 class GuestsView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
@@ -47,7 +50,7 @@ class VehicleView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.Create
     filter_backends = [VehicleFilter, SearchFilter]
 
 
-class KeyView(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.UpdateModelMixin):
+class KeyView(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.ListModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
     permission_classes = (IsAuthenticated, CanWriteKeys)
     queryset = Keys.objects.all()
@@ -102,7 +105,7 @@ class MaterialOutwardView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixin
 
 class MaterialInwardView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = (IsAuthenticated, CanWriteMaterialInward)
+    permission_classes = ()
     queryset = MaterialInward.objects.all()
     serializer_class = MaterialInwardSerializer
     filter_backends = [MaterialInwardFilter, SearchFilter]
@@ -399,8 +402,8 @@ class ReturnableMaterialsUpdateView(viewsets.GenericViewSet,  mixins.UpdateModel
 
         instance = self.get_object()
         instance.status = 'RETURNED / COMPLETED'
-        instance.in_date = request.ist_now.date()
-        instance.in_time = request.ist_now.time()
+        instance.out_date = request.ist_now.date()
+        instance.out_time = request.ist_now.time()
         instance.save()
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
@@ -462,24 +465,30 @@ class BarCodeView(viewsets.GenericViewSet, mixins.CreateModelMixin):
 
     def create(self, request, *args, **kwargs):
 
+        if 'invoice_num' not in request.data:
+            return Response({'message': 'invoice_num is required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if BarCode.objects.filter(invoice_num=request.data.get('invoice_num')):
+            return Response({'message': 'invoice_num already exists'}, status=status.HTTP_400_BAD_REQUEST)
+
         bar_code_last_suffix = BarCode.objects.last()
         if not bar_code_last_suffix:
             bar_code_last_suffix = 1000
         else:
-            if bar_code_last_suffix.invoice_num[:8] != str(date.today()).replace('-', ''):
+            if bar_code_last_suffix.barcode[:8] != str(date.today()).replace('-', ''):
                 bar_code_last_suffix = 1000
             else:
-                bar_code_last_suffix = int(bar_code_last_suffix.invoice_num[-4:])
+                bar_code_last_suffix = int(bar_code_last_suffix.barcode[-4:])
 
         barcode_value = str(date.today()).replace('-', '') + str(bar_code_last_suffix + 1)
-        barcode_image = barcode.get('ean13', barcode_value, writer=ImageWriter())
+        barcode_image = barcode.get('code128', barcode_value, writer=ImageWriter())
         buffer = BytesIO()
         barcode_image.write(buffer)
         # base64_image = base64.b64encode(buffer.getvalue()).decode('utf-8')
-        # BarCode.objects.create(invoice_num=barcode_value, barcode=base64_image).save()
+        BarCode.objects.create(invoice_num=request.data.get('invoice_num'), barcode=barcode_value).save()
         upload_key_file_to_gcp(buffer.getvalue(), barcode_value, 'invoice_bar_code')
         url = generate_key_download_link(barcode_value, 'invoice_bar_code')
-        return Response({'url': url, 'value': barcode_value}, status=status.HTTP_201_CREATED)
+        return Response({'url': url, 'bar_code': barcode_value, 'invoice_num': request.data.get('invoice_num')}, status=status.HTTP_201_CREATED)
 
 
 class CreateKeyView(viewsets.GenericViewSet, mixins.CreateModelMixin):
@@ -498,7 +507,7 @@ class CreateKeyView(viewsets.GenericViewSet, mixins.CreateModelMixin):
         buffer = BytesIO()
         barcode_image.write(buffer)
         # base64_image = base64.b64encode(buffer.getvalue()).decode('utf-8')
-        # KeysMaster.objects.create(key_type=barcode_value, bar_code=base64_image, quantity=request.data.get('quantity')).save()
+        KeysMaster.objects.create(key_type=barcode_value, bar_code='', quantity=request.data.get('quantity')).save()
         upload_key_file_to_gcp(buffer.getvalue(), barcode_value, 'key_bar_code')
         url = generate_key_download_link(barcode_value, 'key_bar_code')
         return Response({'url': url}, status=status.HTTP_201_CREATED)
@@ -524,7 +533,7 @@ class EmployeeCreateView(viewsets.GenericViewSet, mixins.CreateModelMixin, mixin
 
 class EmployeeView(viewsets.GenericViewSet, mixins.ListModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = (IsAuthenticated, CanWriteKeys)
+    permission_classes = ()
     queryset = Employees.objects.all()
     serializer_class = EmployeeSerializer
     filter_backends = [SearchFilter]
@@ -554,3 +563,27 @@ class KeyReturnedUpdateView(viewsets.GenericViewSet,  mixins.UpdateModelMixin):
         instance.save()
         return Response(serializer.data)
     
+
+class ResetPasswordView(viewsets.GenericViewSet, mixins.CreateModelMixin):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
+    permission_classes = ()
+    queryset = get_user_model()
+    serializer_class = LoginUserSerializer
+
+    def create(self, request, *args, **kwargs):
+        
+        req_data = request.data
+        if 'email' not in req_data or 'password' not in req_data:
+            return Response({'message': 'email and password are required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        user = get_user_model().objects.filter(email=req_data['email'])
+        if not user:
+            return Response({'message': 'no user found'}, status=status.HTTP_401_UNAUTHORIZED)
+        user = user[0]
+        # p = make_password(req_data['password'])
+        user.set_password(req_data['password'])
+        user.save()
+
+        return Response({'message': 'success'})
+

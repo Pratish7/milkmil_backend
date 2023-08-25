@@ -2,7 +2,7 @@
 Base settings to build other settings files upon.
 """
 from pathlib import Path
-# from google.cloud import secretmanager
+from google.cloud import secretmanager
 
 import environ
 
@@ -16,26 +16,27 @@ if READ_DOT_ENV_FILE:
     # OS environment variables take precedence over variables from .env
     env.read_env(str(BASE_DIR / ".env"))
 
-project_id = 'integral-sol-395609'
+project_id = 'total-glider-396411'
 
 def get_secret(secret_id):
-    # try:
-    #     client = secretmanager.SecretManagerServiceClient()
-    #     secret_name = f"projects/{project_id}/secrets/{secret_id}/versions/latest"
-    #     response = client.access_secret_version(name=secret_name)
-    #     secret_payload = response.payload.data.decode("UTF-8")
-    #     return secret_payload
-    # except Exception:
+    try:
+        client = secretmanager.SecretManagerServiceClient()
+        secret_name = f"projects/{project_id}/secrets/{secret_id}/versions/latest"
+        response = client.access_secret_version(name=secret_name)
+        secret_payload = response.payload.data.decode("UTF-8")
+        return secret_payload
+    except Exception:
         return ''
 
 BUCKET = get_secret('bucket')
 if not BUCKET:
     BUCKET = 'pratish'
-DB_URL = get_secret('db_url')
 
+DB_URL = get_secret('db_url')
 if not DB_URL:
-    DB_URL = 'postgresql://postgres:root@localhost:5432/'
-    # DB_URL = 'postgres://postgres:0.AH]AeB2[C+V*[A@127.0.0.1/'
+    pass
+    # DB_URL = 'postgresql://postgres:root@localhost:5432/'
+    DB_URL = 'postgres://postgres:0.AH]AeB2[C+V*[A@127.0.0.1/'
 
 # GENERAL
 # ------------------------------------------------------------------------------

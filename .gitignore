@@ -330,3 +330,5 @@ milk_mil_backend/media/
 
 .pytest_cache/
 
+
+*.json

@@ -105,6 +105,9 @@ employee_view.register('employee-view', views.EmployeeView, basename='employee-v
 update_keys_returned = routers.SimpleRouter()
 update_keys_returned.register('key-returned', views.KeyReturnedUpdateView, basename='key-returned')
 
+reset_password = routers.SimpleRouter()
+reset_password.register('reset-password', views.ResetPasswordView, basename='reset-password')
+
 app_name = 'milkmil'
 
 urlpatterns = [
@@ -142,4 +145,5 @@ urlpatterns = [
     path('', include(employee_view.urls)),
     path('', include(keys_queue_router.urls)),
     path('', include(update_keys_returned.urls)),
+    path('', include(reset_password.urls)),
 ]

@@ -60,6 +60,13 @@ class MaterialOutwardSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['id']
 
+    def create(self, validated_data):
+        invoice_num = BarCode.objects.filter(barcode=validated_data['invoice_num'])
+        if not invoice_num:
+            raise serializers.ValidationError({'message': 'bar code not in system'})
+        validated_data['invoice_num'] = invoice_num[0].invoice_num
+        return MaterialOutward.objects.create(**validated_data)
+        
 
 class MaterialInwardSerializer(serializers.ModelSerializer):
 
@@ -67,6 +74,13 @@ class MaterialInwardSerializer(serializers.ModelSerializer):
         model = MaterialInward
         fields = '__all__'
         read_only_fields = ['id']
+
+    def create(self, validated_data):
+        invoice_num = BarCode.objects.filter(barcode=validated_data['invoice_num'])
+        if not invoice_num:
+            raise serializers.ValidationError({'message': 'bar code not in system'})
+        validated_data['invoice_num'] = invoice_num[0].invoice_num
+        return MaterialInward.objects.create(**validated_data)
 
     
 class UserTypesSerializer(serializers.ModelSerializer):

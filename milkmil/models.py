@@ -99,11 +99,11 @@ class ReturnableMaterials(models.Model):
     )
 
     id = models.AutoField(primary_key=True)
-    out_date = models.DateField(auto_now_add=True)
-    out_time = models.TimeField(auto_now_add=True)
-    gate_pass_num = models.IntegerField()
-    in_date = models.DateField(blank=True, null=True)
-    in_time = models.TimeField(blank=True, null=True)
+    out_date = models.DateField(null=True, blank=True)
+    out_time = models.TimeField(null=True, blank=True)
+    gate_pass_num = models.CharField(max_length=255)
+    in_date = models.DateField(auto_now_add=True)
+    in_time = models.TimeField(auto_now_add=True)
     status = models.CharField(choices=status_choices, default='YET TO BE RETURNED')
 
 @receiver(post_save, sender=ReturnableMaterials)
@@ -141,6 +141,7 @@ class MaterialInward(models.Model):
     invoice_num = models.CharField(max_length=255)
     in_time = models.TimeField(auto_now_add=True)
     out_time = models.TimeField(blank=True, null=True)
+    type = models.CharField(max_length=255, blank=True, null=True)
 
 @receiver(post_save, sender=MaterialInward)
 def remove_microseconds_save(sender, instance, created, **kwargs):
@@ -158,7 +159,7 @@ class MasterData(models.Model):
 class BarCode(models.Model):
 
     id = models.AutoField(primary_key=True)
-    barcode = models.TextField()
+    barcode = models.TextField(null=True, blank=True)
     invoice_num = models.CharField()
 
 

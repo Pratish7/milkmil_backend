@@ -1,0 +1,6 @@
+pandas
+psycopg2-binary
+smtpEMAIL
+openpyxl
+SQLAlchemy==1.4.17
+cloud-sql-python-connector[pg8000]

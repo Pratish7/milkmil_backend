@@ -40,10 +40,9 @@ class KeyFilter(filters.BaseFilterBackend):
 class ReturnableMaterialsFilter(filters.BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
-
         req_date = request.query_params.get('date', None)
         if req_date:
-            queryset = queryset.filter(in_date=req_date)
+            queryset = queryset.filter(out_date=req_date)
 
         return queryset
 

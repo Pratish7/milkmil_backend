@@ -1,5 +1,6 @@
 from google.cloud import storage
 from django.conf import settings
+from google import auth
 
 def upload_file_to_gcp(file_content, file_name):
     client = storage.Client()
@@ -9,7 +10,7 @@ def upload_file_to_gcp(file_content, file_name):
 
 
 def generate_download_link(file_name):
-    client = storage.Client()
+    client = storage.Client.from_service_account_json('gcp.json')
     bucket = client.bucket(settings.BUCKET)
     blob = bucket.blob('milkmil/reports/{}'.format(file_name))
 
@@ -30,7 +31,7 @@ def upload_key_file_to_gcp(img_content, file_name, file_loc):
 
 
 def generate_key_download_link(file_name, file_loc):
-    client = storage.Client()
+    client = storage.Client.from_service_account_json('gcp.json')
     bucket = client.bucket(settings.BUCKET)
     blob = bucket.blob('{}/{}'.format(file_loc, file_name + '.jpg'))
 
