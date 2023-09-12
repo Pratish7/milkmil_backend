@@ -510,6 +510,8 @@ class CreateKeyView(viewsets.GenericViewSet, mixins.CreateModelMixin):
             return Response({'message': 'Key already exists'}, status=status.HTTP_400_BAD_REQUEST)
 
         barcode_image = barcode.get('code128', barcode_value, writer=ImageWriter())
+        barcode_image.default_writer_options['module_width'] = 4
+        barcode_image.default_writer_options['module_height'] = 6 
         buffer = BytesIO()
         barcode_image.write(buffer)
         # base64_image = base64.b64encode(buffer.getvalue()).decode('utf-8')
