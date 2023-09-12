@@ -16,7 +16,8 @@ if READ_DOT_ENV_FILE:
     # OS environment variables take precedence over variables from .env
     env.read_env(str(BASE_DIR / ".env"))
 
-project_id = 'total-glider-396411'
+# project_id = 'total-glider-396411'
+project_id = 'integral-sol-395609'
 
 def get_secret(secret_id):
     try:
