@@ -480,15 +480,21 @@ class BarCodeView(viewsets.GenericViewSet, mixins.CreateModelMixin):
             else:
                 bar_code_last_suffix = int(bar_code_last_suffix.barcode[-4:])
 
+        test_report_num = ''
+        if 'test_report_num' in request.data:
+            test_report_num = request.data.get('test_report_num')
+
         barcode_value = str(date.today()).replace('-', '') + str(bar_code_last_suffix + 1)
         barcode_image = barcode.get('code128', barcode_value, writer=ImageWriter())
+        barcode_image.default_writer_options['module_width'] = 4
+        barcode_image.default_writer_options['module_height'] = 6 
         buffer = BytesIO()
         barcode_image.write(buffer)
         # base64_image = base64.b64encode(buffer.getvalue()).decode('utf-8')
-        BarCode.objects.create(invoice_num=request.data.get('invoice_num'), barcode=barcode_value).save()
+        BarCode.objects.create(invoice_num=request.data.get('invoice_num'), test_report_num=test_report_num, barcode=barcode_value).save()
         upload_key_file_to_gcp(buffer.getvalue(), barcode_value, 'invoice_bar_code')
         url = generate_key_download_link(barcode_value, 'invoice_bar_code')
-        return Response({'url': url, 'bar_code': barcode_value, 'invoice_num': request.data.get('invoice_num')}, status=status.HTTP_201_CREATED)
+        return Response({'url': url, 'bar_code': barcode_value, 'invoice_num': request.data.get('invoice_num'), 'test_report_num': test_report_num}, status=status.HTTP_201_CREATED)
 
 
 class CreateKeyView(viewsets.GenericViewSet, mixins.CreateModelMixin):

@@ -123,7 +123,8 @@ class MaterialOutward(models.Model):
     id = models.AutoField(primary_key=True)
     date = models.DateField(auto_now_add=True)
     time = models.TimeField(auto_now_add=True)
-    invoice_num = models.CharField()
+    invoice_num = models.CharField(max_length=255)
+    test_report_num = models.CharField(max_length=255, blank=True, null=True)
     status = models.CharField(choices=status_choices, default='QUEUE')
 
 @receiver(post_save, sender=MaterialOutward)
@@ -160,7 +161,8 @@ class BarCode(models.Model):
 
     id = models.AutoField(primary_key=True)
     barcode = models.TextField(null=True, blank=True)
-    invoice_num = models.CharField()
+    invoice_num = models.CharField(max_length=255)
+    test_report_num = models.CharField(max_length=255, null=True, blank=True)
 
 
 class Employees(models.Model):

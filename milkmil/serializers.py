@@ -65,6 +65,7 @@ class MaterialOutwardSerializer(serializers.ModelSerializer):
         if not invoice_num:
             raise serializers.ValidationError({'message': 'bar code not in system'})
         validated_data['invoice_num'] = invoice_num[0].invoice_num
+        validated_data['test_report_num'] = invoice_num[0].test_report_num
         return MaterialOutward.objects.create(**validated_data)
         
 
