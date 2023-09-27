@@ -4,13 +4,13 @@ from rest_framework.request import Request
 from milk_mil_backend.users.models import UserTypes
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAuthenticated
-from milkmil.models import BarCode, Employees, Guests, KeysMaster, Milk, Vehicle, Keys, ReturnableMaterials, MasterData, MaterialOutward, MaterialInward
+from milkmil.models import BarCode, Employees, Guests, KeysMaster, Milk, Vehicle, Keys, ReturnableMaterials, MasterData, MaterialOutward, MaterialInward, VehicleIDMap
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from milkmil.permissions import CanGenerateBarCode, CanViewReport, CanWriteGuest, CanWriteKeys, CanWriteMasterData, CanWriteMaterialInward, CanWriteMaterialOutward, CanWriteMilk, CanWriteReturnableMaterials, CanWriteVehicle
+from milkmil.permissions import CanGenerateBarCode, CanViewReport, CanWriteGuest, CanWriteKeys, CanWriteMasterData, CanWriteMaterialInward, CanWriteMaterialOutward, CanWriteMilk, CanWriteReturnableMaterials, CanWriteVehicle, CanWriteVehicleVendor
 from milkmil.serializers import BarCodeSerializer, EmployeeSerializer, GuestsSerializer, KeyMasterSerializer, MilkSerializer, VehicleSerializer, KeysSerializer, ReturnableMaterialsSerializer, MasterDataSerializer, MaterialOutwardSerializer, MaterialInwardSerializer, UserTypesSerializer, RegisterUserSerializer, LoginUserSerializer
 from rest_framework.filters import SearchFilter
-from milkmil.filters import GuestsFilter, KeysQueue, MilkFilter, VehicleFilter, KeyFilter, ReturnableMaterialsFilter, MasterDataFilter, MaterialOutwardFilter, MaterialInwardFilter, GuestsInFilter, MaterialInwardQueueFilter, MaterialOutwardQueueFilter, ReturnableMaterialsQueueFilter
+from milkmil.filters import GuestsFilter, KeysQueue, MilkFilter, VehicleFilter, KeyFilter, ReturnableMaterialsFilter, MasterDataFilter, MaterialOutwardFilter, MaterialInwardFilter, GuestsInFilter, MaterialInwardQueueFilter, MaterialOutwardQueueFilter, ReturnableMaterialsQueueFilter, VehicleQueueFilter
 from rest_framework import status
 from rest_framework.response import Response
 import pandas as pd
@@ -42,12 +42,50 @@ class MilkView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateMod
     filter_backends = [MilkFilter, SearchFilter]
 
 
-class VehicleView(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
+class VehicleView(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.ListModelMixin, mixins.UpdateModelMixin):
     authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
-    permission_classes = (IsAuthenticated, CanWriteVehicle)
+    permission_classes = (IsAuthenticated, CanWriteVehicleVendor)
     queryset = Vehicle.objects.all()
     serializer_class = VehicleSerializer
     filter_backends = [VehicleFilter, SearchFilter]
+
+    def create(self, request, *args, **kwargs):
+
+        vehicle_id_map = VehicleIDMap.objects.filter(rfid=request.data.get('vehicle_num'))
+        if vehicle_id_map:
+            vehicle = VehicleIDMap.objects.get(rfid=request.data.get('vehicle_num'))
+            vehicle_num = vehicle.vehicle_num
+        else:
+            return Response({'message': 'Invalid vehicle number'}, status=status.HTTP_400_BAD_REQUEST)
+
+        request_data = request.data
+        if request_data.get('status') == 'IN':
+            instance = Vehicle.objects.filter(vehicle_num=vehicle_num).last()
+            if instance and instance.status == 'IN':
+                return Response({'message': 'Vehicle already in'}, status=status.HTTP_400_BAD_REQUEST)
+            request_data['vehicle_num'] = vehicle_num
+            serializer = self.get_serializer(data=request_data)
+            serializer.initial_data['in_time'] = request.data.get('time')
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)           
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        elif request_data.get('status') == 'OUT':
+            instance = Vehicle.objects.filter(vehicle_num=vehicle_num).last()
+            if instance and instance.status == 'IN':
+                instance.out_time = request.data.get('time')
+                instance.status = 'OUT'
+                instance.save()
+                return Response({'message': 'success'}, status=status.HTTP_201_CREATED)
+            else:
+                return Response({'message': 'No vehicle found with this vehicle number with status IN'}, status=status.HTTP_400_BAD_REQUEST)
+            
+    
+class VehicleQueueView(viewsets.GenericViewSet,  mixins.ListModelMixin):
+    authentication_classes = (TokenAuthentication, SessionAuthentication, JWTAuthentication)
+    permission_classes = ()
+    queryset = Vehicle.objects.all()
+    serializer_class = VehicleSerializer
+    filter_backends = [VehicleQueueFilter, SearchFilter]
 
 
 class KeyView(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.ListModelMixin):
@@ -486,8 +524,8 @@ class BarCodeView(viewsets.GenericViewSet, mixins.CreateModelMixin):
 
         barcode_value = str(date.today()).replace('-', '') + str(bar_code_last_suffix + 1)
         barcode_image = barcode.get('code128', barcode_value, writer=ImageWriter())
-        barcode_image.default_writer_options['module_width'] = 4
-        barcode_image.default_writer_options['module_height'] = 6 
+        barcode_image.default_writer_options['module_width'] = 2
+        barcode_image.default_writer_options['module_height'] = 3 
         buffer = BytesIO()
         barcode_image.write(buffer)
         # base64_image = base64.b64encode(buffer.getvalue()).decode('utf-8')
@@ -510,8 +548,8 @@ class CreateKeyView(viewsets.GenericViewSet, mixins.CreateModelMixin):
             return Response({'message': 'Key already exists'}, status=status.HTTP_400_BAD_REQUEST)
 
         barcode_image = barcode.get('code128', barcode_value, writer=ImageWriter())
-        barcode_image.default_writer_options['module_width'] = 4
-        barcode_image.default_writer_options['module_height'] = 6 
+        barcode_image.default_writer_options['module_width'] = 2
+        barcode_image.default_writer_options['module_height'] = 3 
         buffer = BytesIO()
         barcode_image.write(buffer)
         # base64_image = base64.b64encode(buffer.getvalue()).decode('utf-8')

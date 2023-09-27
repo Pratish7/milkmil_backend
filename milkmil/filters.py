@@ -122,3 +122,12 @@ class ReturnableMaterialsQueueFilter(filters.BaseFilterBackend):
 
         queryset = queryset.filter(status='YET TO BE RETURNED')
         return queryset
+    
+
+class VehicleQueueFilter(filters.BaseFilterBackend):
+
+    def filter_queryset(self, request, queryset, view):
+
+        queryset = queryset.filter(status='IN')
+        return queryset
+

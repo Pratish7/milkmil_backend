@@ -24,6 +24,9 @@ milk_report_router.register('milk-report', views.MilkReportView, basename='milk-
 vehicle_router = routers.SimpleRouter()
 vehicle_router.register('vehicle', views.VehicleView, basename='vehicle')
 
+vehicle_queue_router = routers.SimpleRouter()
+vehicle_queue_router.register('vehicle-queue', views.VehicleQueueView, basename='vehicle-queue')
+
 vehicle_report_router = routers.SimpleRouter()
 vehicle_report_router.register('vehicle-report', views.VehicleReportView, basename='vehicle-report')
 
@@ -146,4 +149,5 @@ urlpatterns = [
     path('', include(keys_queue_router.urls)),
     path('', include(update_keys_returned.urls)),
     path('', include(reset_password.urls)),
+    path('', include(vehicle_queue_router.urls)),
 ]

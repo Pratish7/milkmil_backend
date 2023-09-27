@@ -50,21 +50,17 @@ def remove_microseconds_save(sender, instance, created, **kwargs):
 
 class Vehicle(models.Model):
 
-    id = models.AutoField(primary_key=True)
-    date = models.DateField(auto_now_add=True)
-    type = models.CharField(max_length=255)
-    driver_name = models.CharField(max_length=255)
-    reason = models.CharField(max_length=255)
-    num_passengers = models.IntegerField()
-    in_time = models.DateTimeField(auto_now_add=True)
-    out_time = models.DateTimeField(null=True, blank=True)
-    out_kms = models.FloatField(null=True, blank=True)
+    status_choices = (
+        ('IN', 'IN'),
+        ('OUT', 'OUT'),
+    )
 
-@receiver(post_save, sender=Vehicle)
-def remove_microseconds_save(sender, instance, created, **kwargs):
-    if created:
-        instance.in_time = instance.in_time.replace(microsecond=0)
-        instance.save()
+    id = models.AutoField(primary_key=True)
+    driver_name = models.CharField(max_length=255)
+    in_time = models.DateTimeField(null=True, blank=True)
+    out_time = models.DateTimeField(null=True, blank=True)
+    vehicle_num = models.CharField(max_length=255)
+    status = models.CharField(choices=status_choices)
 
 
 class Keys(models.Model):
@@ -171,3 +167,10 @@ class Employees(models.Model):
     name = models.CharField(max_length=255)
     role = models.CharField(max_length=255)
     phone = models.CharField(max_length=255)
+
+
+class VehicleIDMap(models.Model):
+
+    id = models.AutoField(primary_key=True)
+    vehicle_num = models.CharField(max_length=255)
+    rfid = models.CharField(max_length=255)

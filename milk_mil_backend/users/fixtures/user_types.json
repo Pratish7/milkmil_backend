@@ -110,5 +110,12 @@
       "fields": {
         "user_type": "GENERATE BILLING"
       }
+    },
+    {
+      "model": "users.UserTypes",
+      "pk": 17,
+      "fields": {
+        "user_type": "VEHICLE WRITER (VENDOR)"
+      }
     }
   ]

@@ -27,7 +27,7 @@ class VehicleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vehicle
         fields = '__all__'
-        read_only_fields = ['id', 'date', 'in_time', 'out_time']
+        read_only_fields = ['id']
 
 
 class KeysSerializer(serializers.ModelSerializer):
